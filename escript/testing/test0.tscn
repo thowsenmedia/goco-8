@@ -1,0 +1,80 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://UI/Theme.tres" type="Theme" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+var ESNode = load(\"res://escript/ESNode.gd\")
+
+export(String, MULTILINE) var code
+
+var lexer:Lexer
+var parser:Parser
+var compiler:Compiler
+
+func _ready():
+	lexer = Lexer.new()
+	parser = Parser.new()
+	compiler = Compiler.new()
+	
+	var tokens = lexer.tokenize(code)
+	
+	if not tokens:
+		echo(\"Syntax Error!:\")
+		echo(lexer.errors)
+	else:
+		echo(\"Tokens:\")
+		echo(lexer.to_names(tokens))
+		
+		echo(\"Parse Tree:\")
+		var root = parser.parse(tokens)
+		if not root:
+			echo(\"Parse error!\")
+		else:
+			print_nodes(root)
+			parser.cleanup()
+			echo(\"------------- compiled: -----------\")
+			var gdscript = compiler.compile(root)
+			echo(gdscript)
+			print(gdscript)
+
+
+func print_nodes(node, indent:int = 0):
+	if node is ESNode:
+		echo(\" \".repeat(indent) + node.name)
+		indent += 2
+		for child in node.children:
+			print_nodes(child, indent+2)
+	else:
+		echo(\" \".repeat(indent) + Lexer.get_token_name(node.type) + \" (\" + node.value + \")\")
+
+
+func echo(text):
+	$ScrollContainer/VBoxContainer/RichTextLabel.text += str(text) + \"\\n\"
+"
+
+[node name="Node" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = SubResource( 1 )
+code = "func hello():
+	hi=\"world\"
+end"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+margin_right = 320.0
+margin_bottom = 240.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer"]
+margin_right = 320.0
+margin_bottom = 240.0
+size_flags_horizontal = 3
+size_flags_vertical = 3

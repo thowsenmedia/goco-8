@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Spriter/TilesetSelector.gd" type="Script" id=1]
+
+[node name="TilesetSelector" type="HBoxContainer"]
+margin_right = 320.0
+margin_bottom = 17.0
+custom_constants/separation = 1
+script = ExtResource( 1 )
+
+[node name="ScrollLeft" type="Button" parent="."]
+visible = false
+margin_right = 16.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 16, 0 )
+text = "<"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+margin_right = 303.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+follow_focus = true
+scroll_vertical_enabled = false
+
+[node name="ButtonList" type="HBoxContainer" parent="ScrollContainer"]
+margin_right = 303.0
+size_flags_horizontal = 3
+custom_constants/separation = 2
+
+[node name="ScrollRight" type="Button" parent="."]
+visible = false
+margin_left = 287.0
+margin_right = 303.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 16, 0 )
+text = ">"
+
+[node name="AddTilesetButton" type="Button" parent="."]
+margin_left = 304.0
+margin_right = 320.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 16, 0 )
+text = "+"

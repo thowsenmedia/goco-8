@@ -1,0 +1,219 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://SFXer/SFXer.gd" type="Script" id=1]
+[ext_resource path="res://UI/Theme.tres" type="Theme" id=2]
+[ext_resource path="res://SFXer/SynthPlayer.gd" type="Script" id=3]
+[ext_resource path="res://SFXer/patterns/testPattern.tres" type="Resource" id=4]
+[ext_resource path="res://UI/Controls/SpinnerControl.gd" type="Script" id=5]
+[ext_resource path="res://SFXer/TimelineView.gd" type="Script" id=6]
+[ext_resource path="res://SFXer/icons/wave_sine.png" type="Texture" id=7]
+[ext_resource path="res://SFXer/icons/wave_triangle.png" type="Texture" id=8]
+[ext_resource path="res://SFXer/icons/wave_square.png" type="Texture" id=9]
+[ext_resource path="res://SFXer/icons/wave_saw.png" type="Texture" id=10]
+[ext_resource path="res://UI/Controls/Tooltip.gd" type="Script" id=11]
+
+[sub_resource type="ButtonGroup" id=3]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.0392157, 0.0392157, 0.0392157, 1 )
+
+[node name="SFXer" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+focus_mode = 2
+theme = ExtResource( 2 )
+script = ExtResource( 1 )
+test_pattern = ExtResource( 4 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 0
+
+[node name="TopBar" type="PanelContainer" parent="VBoxContainer"]
+margin_right = 320.0
+margin_bottom = 19.0
+
+[node name="MenuBar" type="HBoxContainer" parent="VBoxContainer/TopBar"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 318.0
+margin_bottom = 17.0
+
+[node name="Label" type="Label" parent="VBoxContainer/TopBar/MenuBar"]
+margin_top = 1.0
+margin_right = 18.0
+margin_bottom = 14.0
+text = "SFX"
+
+[node name="SFXSlotValue" type="Control" parent="VBoxContainer/TopBar/MenuBar"]
+margin_left = 22.0
+margin_right = 58.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 36, 15 )
+script = ExtResource( 5 )
+max_value = 256
+prefix = "#"
+ensure_digit_length = true
+
+[node name="Control" type="VBoxContainer" parent="VBoxContainer"]
+margin_top = 19.0
+margin_right = 320.0
+margin_bottom = 240.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="OptionsPanel" type="PanelContainer" parent="VBoxContainer/Control"]
+margin_right = 320.0
+margin_bottom = 21.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Control/OptionsPanel"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 318.0
+margin_bottom = 19.0
+
+[node name="Waves" type="HBoxContainer" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer"]
+margin_right = 80.0
+margin_bottom = 17.0
+
+[node name="Label" type="Label" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/Waves"]
+margin_top = 2.0
+margin_right = 28.0
+margin_bottom = 15.0
+text = "Wave:"
+
+[node name="WaveButtons" type="HBoxContainer" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/Waves"]
+margin_left = 32.0
+margin_right = 80.0
+margin_bottom = 17.0
+custom_constants/separation = 0
+
+[node name="Sine" type="Button" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/Waves/WaveButtons" groups=["tooltip", "tooltip=Sine Wave"]]
+margin_right = 12.0
+margin_bottom = 17.0
+focus_mode = 0
+toggle_mode = true
+shortcut_in_tooltip = false
+pressed = true
+enabled_focus_mode = 0
+group = SubResource( 3 )
+icon = ExtResource( 7 )
+icon_align = 1
+
+[node name="Triangle" type="Button" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/Waves/WaveButtons" groups=["tooltip", "tooltip=Triangle Wave"]]
+margin_left = 12.0
+margin_right = 24.0
+margin_bottom = 17.0
+focus_mode = 0
+toggle_mode = true
+shortcut_in_tooltip = false
+enabled_focus_mode = 0
+group = SubResource( 3 )
+icon = ExtResource( 8 )
+icon_align = 1
+
+[node name="Square" type="Button" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/Waves/WaveButtons" groups=["tooltip", "tooltip=Square Wave"]]
+margin_left = 24.0
+margin_right = 36.0
+margin_bottom = 17.0
+focus_mode = 0
+toggle_mode = true
+shortcut_in_tooltip = false
+enabled_focus_mode = 0
+group = SubResource( 3 )
+icon = ExtResource( 9 )
+icon_align = 1
+
+[node name="Saw" type="Button" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/Waves/WaveButtons" groups=["tooltip", "tooltip=Saw Wave"]]
+margin_left = 36.0
+margin_right = 48.0
+margin_bottom = 17.0
+focus_mode = 0
+toggle_mode = true
+shortcut_in_tooltip = false
+enabled_focus_mode = 0
+group = SubResource( 3 )
+icon = ExtResource( 10 )
+icon_align = 1
+
+[node name="SpeedLength" type="HBoxContainer" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer"]
+margin_left = 175.0
+margin_right = 316.0
+margin_bottom = 17.0
+size_flags_horizontal = 10
+custom_constants/separation = 4
+
+[node name="Speed" type="HBoxContainer" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/SpeedLength"]
+margin_right = 66.0
+margin_bottom = 17.0
+
+[node name="Label" type="Label" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/SpeedLength/Speed"]
+margin_top = 2.0
+margin_right = 32.0
+margin_bottom = 15.0
+text = "Speed:"
+
+[node name="SpeedValue" type="Control" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/SpeedLength/Speed"]
+margin_left = 36.0
+margin_right = 66.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 30, 15 )
+theme = ExtResource( 2 )
+script = ExtResource( 5 )
+min_value = 1
+max_value = 32
+value = 1
+
+[node name="Length" type="HBoxContainer" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/SpeedLength"]
+margin_left = 70.0
+margin_right = 141.0
+margin_bottom = 17.0
+
+[node name="Label" type="Label" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/SpeedLength/Length"]
+margin_top = 2.0
+margin_right = 37.0
+margin_bottom = 15.0
+text = "Length:"
+
+[node name="LengthValue" type="Control" parent="VBoxContainer/Control/OptionsPanel/HBoxContainer/SpeedLength/Length"]
+margin_left = 41.0
+margin_right = 71.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 30, 15 )
+theme = ExtResource( 2 )
+script = ExtResource( 5 )
+min_value = 1.0
+max_value = 64
+value = 1.0
+value_bg = Color( 0.101961, 0.101961, 0.101961, 1 )
+
+[node name="MainPanel" type="PanelContainer" parent="VBoxContainer/Control"]
+margin_top = 21.0
+margin_right = 320.0
+margin_bottom = 204.0
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 2 )
+
+[node name="TimelineView" type="Control" parent="VBoxContainer/Control/MainPanel"]
+margin_right = 320.0
+margin_bottom = 183.0
+focus_mode = 2
+script = ExtResource( 6 )
+
+[node name="SynthPlayer" type="AudioStreamPlayer" parent="VBoxContainer/Control/MainPanel/TimelineView"]
+bus = "Music"
+script = ExtResource( 3 )
+buffer_length = 0.5
+
+[node name="StatusPanel" type="PanelContainer" parent="VBoxContainer/Control"]
+margin_top = 204.0
+margin_right = 320.0
+margin_bottom = 221.0
+
+[node name="tooltip" type="Label" parent="VBoxContainer/Control/StatusPanel"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 318.0
+margin_bottom = 15.0
+script = ExtResource( 11 )

@@ -1,0 +1,236 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Coder/Coder.gd" type="Script" id=1]
+[ext_resource path="res://UI/Theme.tres" type="Theme" id=2]
+[ext_resource path="res://Coder/Tree.gd" type="Script" id=3]
+[ext_resource path="res://Coder/EditorTabs.gd" type="Script" id=4]
+[ext_resource path="res://Coder/Sidebar.gd" type="Script" id=5]
+[ext_resource path="res://Coder/HelpPanel.gd" type="Script" id=6]
+
+[sub_resource type="Animation" id=1]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:size_flags_stretch_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "hide"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:size_flags_stretch_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.5, 0.0 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "show"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:size_flags_stretch_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("HelpPanel:size_flags_stretch_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "show"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("HelpPanel:size_flags_stretch_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[node name="Coder" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 2 )
+custom_constants/separation = 2
+script = ExtResource( 1 )
+
+[node name="Code" type="HBoxContainer" parent="."]
+margin_right = 320.0
+margin_bottom = 147.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.62
+custom_constants/separation = 0
+
+[node name="Sidebar" type="VBoxContainer" parent="Code"]
+margin_right = 20.0
+margin_bottom = 147.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 0
+script = ExtResource( 5 )
+
+[node name="FileMenu" type="HBoxContainer" parent="Code/Sidebar"]
+margin_right = 20.0
+margin_bottom = 17.0
+
+[node name="AddScriptButton" type="Button" parent="Code/Sidebar/FileMenu"]
+margin_right = 20.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 20, 0 )
+text = "+"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Code/Sidebar"]
+root_node = NodePath("../Tree")
+autoplay = "RESET"
+anims/RESET = SubResource( 1 )
+anims/hide = SubResource( 2 )
+anims/show = SubResource( 3 )
+
+[node name="Tree" type="VBoxContainer" parent="Code/Sidebar"]
+margin_top = 17.0
+margin_right = 20.0
+margin_bottom = 17.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 0
+script = ExtResource( 3 )
+
+[node name="HelpButton" type="Button" parent="Code/Sidebar"]
+margin_top = 130.0
+margin_right = 20.0
+margin_bottom = 147.0
+size_flags_vertical = 10
+toggle_mode = true
+text = "?"
+
+[node name="EditorTabs" type="TabContainer" parent="Code"]
+margin_left = 20.0
+margin_right = 320.0
+margin_bottom = 147.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+custom_constants/hseparation = 0
+custom_constants/top_margin = 0
+custom_constants/side_margin = 0
+tab_align = 0
+tabs_visible = false
+script = ExtResource( 4 )
+
+[node name="HelpPanel" type="MarginContainer" parent="."]
+margin_top = 149.0
+margin_right = 320.0
+margin_bottom = 240.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+script = ExtResource( 6 )
+
+[node name="HelpText" type="RichTextLabel" parent="HelpPanel"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 316.0
+margin_bottom = 87.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+bbcode_text = "[center]FUNCTIONS[/center]
+
+[color=gray]btn(action:String, player_id:int = 0)[/color]
+	returns a ButtonState object, containing three boolean properties: down, pressed and released.
+	
+[color=gray] btn_[action](player_id:int = 0)[/color]
+	Shorthand for the btn() function. For example, btn_a(2) returns the state of the A button for player #2.
+	
+[color=gray] get_camera()[/color]
+	returns the main camera
+
+[color=gray] get_tileset(name:String)[/color]
+	returns a given Tileset.
+	
+[color=gray] get_map(name:String[/color]
+	returns a given map
+
+[color=gray] draw_map(name:String, pos_x: int, pos_y: int)[/color]
+	draw the given map from the top left corner,starting at the given position.
+	
+[color=gray] draw_sprite(tileset:String, tile:int, x:int, y:int, w:int, h:int[/color]
+	draw a single tile/sprite from the given tileset at x and y position. w and h (width & height) are optional arguments."
+text = "FUNCTIONS
+
+btn(action:String, player_id:int = 0)
+	returns a ButtonState object, containing three boolean properties: down, pressed and released.
+	
+ btn_[action](player_id:int = 0)
+	Shorthand for the btn() function. For example, btn_a(2) returns the state of the A button for player #2.
+	
+ get_camera()
+	returns the main camera
+
+ get_tileset(name:String)
+	returns a given Tileset.
+	
+ get_map(name:String
+	returns a given map
+
+ draw_map(name:String, pos_x: int, pos_y: int)
+	draw the given map from the top left corner,starting at the given position.
+	
+ draw_sprite(tileset:String, tile:int, x:int, y:int, w:int, h:int
+	draw a single tile/sprite from the given tileset at x and y position. w and h (width & height) are optional arguments."
+selection_enabled = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HelpPanel"]
+root_node = NodePath("../..")
+anims/RESET = SubResource( 5 )
+anims/show = SubResource( 4 )
+
+[connection signal="pressed" from="Code/Sidebar/FileMenu/AddScriptButton" to="." method="_on_AddScriptButton_pressed"]
+[connection signal="pressed" from="Code/Sidebar/HelpButton" to="HelpPanel" method="toggle"]

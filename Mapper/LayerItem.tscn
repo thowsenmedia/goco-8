@@ -1,0 +1,7 @@
+[gd_scene format=2]
+
+[node name="LayerItem" type="Button"]
+margin_right = 80.0
+margin_bottom = 17.0
+toggle_mode = true
+shortcut_in_tooltip = false

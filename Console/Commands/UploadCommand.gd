@@ -1,5 +1,12 @@
 class_name UploadCommand extends ConsoleCommand
 
+func _disconnect_all():
+	if ES.console.gocoNet.is_connected("upload_success", self, "_on_upload_success"):
+		ES.console.gocoNet.disconnect("upload_success", self, "_on_upload_success")
+	if ES.console.gocoNet.is_connected("upload_failed", self, "_on_upload_failed"):
+		ES.console.gocoNet.disconnect("upload_failed", self, "_on_upload_failed")
+	
+
 func run(args:Array = []):
 	if args.size() == 0:
 		ES.error("Please specify a game name.")
@@ -11,7 +18,10 @@ func run(args:Array = []):
 	
 	var path = (ES.console.dir + "/" + args[0]).replace('///', '//')
 	if not ES.console.gocoNet.is_connected("upload_success", self, "_on_upload_success"):
+		ES.console.gocoNet.connect("upload_success", self, "_on_upload_success")
+	if not ES.console.gocoNet.is_connected("upload_failed", self, "_on_upload_failed"):
 		ES.console.gocoNet.connect("upload_failed", self, "_on_upload_failed")
+	
 	
 	var f = File.new()
 	if not f.file_exists(path):
@@ -32,3 +42,11 @@ func run(args:Array = []):
 	ES.console.gocoNet.upload("pong", game_base64)
 	
 	return OK
+
+
+func _on_upload_success(response_code, message):
+	ES.echo("Upload completed.")
+
+
+func _on_upload_failed(result, response_code, headers, body):
+	ES.error("Upload failed:" + body.get_string_from_utf8())

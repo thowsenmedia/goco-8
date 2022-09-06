@@ -8,3 +8,6 @@ func write(text:String):
 
 func run(args:Array = []) -> int:
 	return COMMAND_ERROR
+
+func get_help() -> String:
+	return "This command has no help."

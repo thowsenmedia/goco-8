@@ -9,7 +9,7 @@ func _disconnect_all():
 
 func run(args:Array = []):
 	if args.size() == 0:
-		ES.error("Please specify a game name.")
+		ES.error("Please specify a game file.")
 		return COMMAND_ERROR
 	
 	if not ES.console.gocoNet.logged_in:
@@ -33,13 +33,16 @@ func run(args:Array = []):
 		ES.error("Failed to open " + path + ". Err: " + str(err))
 		return COMMAND_ERROR
 	
-	# get game data and convert to utf8
+	# unpack game to check for title and version
+	var packed_project = ES.packer.unpack(path)
+	
+	# get game data and convert to base64
 	var game = f.get_buffer(f.get_len())
 	var game_base64 = Marshalls.raw_to_base64(game)
 	
 	f.close()
 	
-	ES.console.gocoNet.upload("pong", game_base64)
+	ES.console.gocoNet.upload(packed_project, game_base64)
 	
 	return OK
 

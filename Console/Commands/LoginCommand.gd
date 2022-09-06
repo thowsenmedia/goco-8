@@ -1,6 +1,5 @@
 class_name LoginCommand extends ConsoleCommand
 
-
 func run(args:Array = []):
 	if args.size() < 2:
 		ES.error("Login needs a username followed by a password.")

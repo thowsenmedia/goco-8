@@ -386,7 +386,8 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Epicus-8"
+config/name="Goco-8"
+config/description="Fantasy Console"
 run/main_scene="res://Editor.tscn"
 config/icon="res://icon.png"
 

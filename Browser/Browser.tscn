@@ -71,7 +71,7 @@ margin_right = 41.0
 margin_bottom = 13.0
 text = "Author: "
 
-[node name="VersionValue" type="Label" parent="HBoxContainer/GameInfo/Author"]
+[node name="AuthorValue" type="Label" parent="HBoxContainer/GameInfo/Author"]
 margin_left = 45.0
 margin_right = 111.0
 margin_bottom = 13.0

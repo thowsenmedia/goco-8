@@ -9,4 +9,6 @@ func run(args:Array = []) -> int:
 	
 	write(msg)
 	
+	write("For help about a given command, type 'help [command]'")
+	
 	return OK

@@ -4,6 +4,8 @@ var Map = load("res://Project/Map.gd")
 
 var name:String
 var path:String
+var title:String
+var version:int = 0
 var tilesets := {}
 var scripts := {}
 var maps := {}
@@ -89,6 +91,8 @@ func save_data():
 		ES.echo("Failed to open project_file for saving. Err: " + str(err))
 		return false
 	
+	version += 1
+	
 	save_tilesets()
 	
 	f.store_var(serialize(), true)
@@ -165,6 +169,8 @@ func pack():
 		"maps": {},
 		"scripts": {},
 		"meta": meta,
+		"version": version,
+		"title": title,
 	}
 	
 	# tilesets
@@ -182,6 +188,8 @@ func pack():
 func unpack(packed:Dictionary):
 	name = packed.name
 	meta = packed.meta
+	version = packed.version
+	title = packed.title
 	tilesets = {}
 	scripts = {}
 	
@@ -207,7 +215,8 @@ func serialize():
 		"tilesets": {},
 		"maps": {},
 		"scripts": {},
-		"meta": meta
+		"meta": meta,
+		"version": version
 	}
 	
 	for tileset in tilesets.values():
@@ -228,6 +237,12 @@ func unserialize(data:Dictionary):
 		var tileset = Tileset.new()
 		tileset.unserialize(tileset_data)
 		tilesets[tileset.title] = tileset
+	
+	if data.has("version"):
+		version = data.version
+	
+	if data.has("title"):
+		title = data.title
 	
 	# maps
 	if data.has("maps"):

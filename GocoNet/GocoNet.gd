@@ -49,7 +49,7 @@ func _prepare_query_string(data:Dictionary) -> String:
 	
 	var i = 0
 	for key in data.keys():
-		string += key + "=" + data[key]
+		string += key + "=" + str(data[key]).http_escape()
 		if i < data.size() - 1:
 			string += "&"
 		i+= 1
@@ -87,13 +87,14 @@ func _login_status(result, response_code, headers, body):
 		emit_signal("login_failed", result, response_code, headers, body)
 
 
-func upload(title: String, game_data: String):
+func upload(packed_project, game_data: String):
 	_disconnect_all()
 	connect("request_completed", self, "_upload_status")
 	var game = {
 		"username": credentials.username,
 		"password": credentials.password,
-		"title": title,
+		"title": packed_project.title,
+		"version": packed_project.version,
 		"data": game_data
 	}
 	var query = _prepare_query_string(game)

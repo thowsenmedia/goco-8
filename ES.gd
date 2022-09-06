@@ -1,5 +1,7 @@
 extends Node
 
+const VERSION := "0.5.1"
+
 var scene_arguments := {}
 var current_scene = null
 
@@ -21,9 +23,6 @@ func open_project(project:String):
 	return true
 
 
-#-----------------------#
-#  Logging
-#-----------------------#
 func echo(what:String, color:String = "white"):
 	print(what)
 	
@@ -35,7 +34,7 @@ func echo(what:String, color:String = "white"):
 
 func error(message:String):
 	echo("Error: " + message, "red")
-	if editor:
+	if is_instance_valid(editor):
 		editor.notify("ERROR: " + message)
 
 

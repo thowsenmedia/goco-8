@@ -1,26 +1,37 @@
 class_name Console extends PanelContainer
 
+const ARGUMENT_PATTERN = '("(?:[^"\\\\]|\\\\.)*")|(\'(?:[^\'\\\\]|\\\\.)*\')|([^ ]+)'
+
+var argument_regex = RegEx.new()
+
 onready var output = $VBoxContainer/Output
 onready var input = $VBoxContainer/HBoxContainer/Input
 onready var gocoNet = $GocoNet
 
 var commands := {}
 var welcome_message = """[center]
-Welcome to [color=purple]Epikus-8![/color]
+[color=purple]/    G O C O - 8    \\[/color]
+
 [color=gray]Copyright (c) 2022 - Thowsen Media
-Version: 0.4[/color][/center]
-[color=gray]---------------------------------------------------[/color]
+Version: 0.5.1[/color]
+[color=gray]--------------------------------------------------[/color]
+[/center]
 
 Type [color=yellow]help[/color] for a list of commands, or [color=yellow]quickstart[/color] for a quick introduction.
 
-For more information, see [color=teal]thowsenmedia.itch.io/epikus-8[/color].
-Source code is available at [color=teal]github.com/petterthowsen/epikus-8[/color].
+Type [color=yellow]browse[/color] to browse games. To upload games, register for an account at [color=teal]goco8.thowsenmedia.com[/color],
+then you can 'login [username] [password]', and 'upload [your_game]' (first you need to 'pack [the_game]').
+
+Website: [color=teal]goco8.thowsenmedia.com[/color].
+Source: [color=teal]github.com/thowsenmedia/goco-8[/color].
 """
 
 var dir:String = "user://"
 
 func _init():
 	ES.console = self
+	argument_regex.compile(ARGUMENT_PATTERN)
+	
 
 func _ready():
 	add_command("help", HelpCommand.new())
@@ -74,12 +85,21 @@ func run(command:String, args:Array):
 
 func process_command(string:String):
 	output.write("->" + string)
-	var args = Array(string.split(" "))
-	var command = args.pop_front()
+	var split = Array(string.split(" ", false, 1))
+	var command = split.pop_front()
+	
+	var args = []
+	if split.size() > 0:
+		var matches:Array = argument_regex.search_all(split.pop_front())
+
+		for m in matches:
+			var argument:String = m.strings[0]
+			argument = argument.trim_prefix('"').trim_prefix("'").trim_suffix('"').trim_suffix("'")
+			args.append(argument)
 	
 	if commands.has(command):
 		var err = run(command, args)
 		if err:
 			output.write("[color=red]Command failed.[/color]")
 	else:
-		output.write("Unknown command '" + command + "'...")
+		output.write("[color=red]Unknown command '" + command + "'...[/color]")

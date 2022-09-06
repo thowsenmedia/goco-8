@@ -12,6 +12,11 @@ var current_page:int = 1
 var games = []
 
 func _ready():
+	# ensure games dir exists
+	var dir = Directory.new()
+	if not dir.dir_exists("user://games"):
+		dir.make_dir("user://games")
+	
 	gameList.connect("item_selected", self, "_game_selected")
 	gameList.connect("item_activated", self, "_game_activated")
 	gameInfo.hide()
@@ -37,24 +42,29 @@ func _info_received(result):
 	gocoNet.get_games(current_page)
 
 
-func _games_received(result):
-	games = result.games.values()
-	print(games)
+func _games_received(result:Dictionary):
 	_clear_games()
-	for game in games:
-		gameList.add_item(game.title, null, true)
+	
+	if result.games is Dictionary:
+		games = result.games.values()
+		print(games)
+		for game in games:
+			gameList.add_item(game.title, null, true)
 
 
 func _clear_games():
 	for i in gameList.get_item_count():
 		gameList.remove_item(i)
 
+
 func _game_selected(game_id):
 	var game = games[game_id]
 	gameInfo.find_node("Title").text = game.title
-	#gameInfo.find_node("VersionValue").text = str(game.version)
+	gameInfo.find_node("VersionValue").text = str(game.version)
+	gameInfo.find_node("AuthorValue").text = str(game.author)
 	
 	gameInfo.show()
+
 
 func _game_activated(game_id):
 	var game = games[game_id]
@@ -63,5 +73,21 @@ func _game_activated(game_id):
 
 
 func _on_download_success(result):
-	print("download success! lets run it!")
-	print(result)
+	run_game(result.filename)
+
+
+func run_game(filename:String):
+	var file = "user://games/" + filename
+	
+	var f = File.new()
+	if not f.file_exists(file):
+		ES.error("No file named " + file + ".")
+		return false
+	
+	ES.echo("Running " + file + "...")
+	
+	var packed_project = ES.packer.unpack(file)
+	
+	ES.goto_scene("res://Runner/Runner.tscn", {
+		"packed_project": packed_project,
+	})

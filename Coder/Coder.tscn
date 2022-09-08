@@ -89,20 +89,21 @@ tracks/0/keys = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 2 )
-custom_constants/separation = 2
+custom_constants/separation = 0
 script = ExtResource( 1 )
+testing = true
 
 [node name="Code" type="HBoxContainer" parent="."]
 margin_right = 320.0
-margin_bottom = 147.0
+margin_bottom = 239.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 1.62
 custom_constants/separation = 0
 
 [node name="Sidebar" type="VBoxContainer" parent="Code"]
-margin_right = 20.0
-margin_bottom = 147.0
+margin_right = 41.0
+margin_bottom = 239.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.0
@@ -110,14 +111,22 @@ custom_constants/separation = 0
 script = ExtResource( 5 )
 
 [node name="FileMenu" type="HBoxContainer" parent="Code/Sidebar"]
-margin_right = 20.0
+margin_right = 41.0
 margin_bottom = 17.0
+custom_constants/separation = 1
 
 [node name="AddScriptButton" type="Button" parent="Code/Sidebar/FileMenu"]
 margin_right = 20.0
 margin_bottom = 17.0
 rect_min_size = Vector2( 20, 0 )
 text = "+"
+
+[node name="RemoveScriptButton" type="Button" parent="Code/Sidebar/FileMenu"]
+margin_left = 21.0
+margin_right = 41.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 20, 0 )
+text = "X"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Code/Sidebar"]
 root_node = NodePath("../Tree")
@@ -128,7 +137,7 @@ anims/show = SubResource( 3 )
 
 [node name="Tree" type="VBoxContainer" parent="Code/Sidebar"]
 margin_top = 17.0
-margin_right = 20.0
+margin_right = 41.0
 margin_bottom = 17.0
 focus_mode = 2
 size_flags_horizontal = 3
@@ -138,17 +147,17 @@ custom_constants/separation = 0
 script = ExtResource( 3 )
 
 [node name="HelpButton" type="Button" parent="Code/Sidebar"]
-margin_top = 130.0
-margin_right = 20.0
-margin_bottom = 147.0
+margin_top = 222.0
+margin_right = 41.0
+margin_bottom = 239.0
 size_flags_vertical = 10
 toggle_mode = true
 text = "?"
 
 [node name="EditorTabs" type="TabContainer" parent="Code"]
-margin_left = 20.0
+margin_left = 41.0
 margin_right = 320.0
-margin_bottom = 147.0
+margin_bottom = 239.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
@@ -160,23 +169,22 @@ tabs_visible = false
 script = ExtResource( 4 )
 
 [node name="HelpPanel" type="MarginContainer" parent="."]
-margin_top = 149.0
+margin_top = 239.0
 margin_right = 320.0
 margin_bottom = 240.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.0
 custom_constants/margin_right = 4
-custom_constants/margin_top = 4
+custom_constants/margin_top = 0
 custom_constants/margin_left = 4
-custom_constants/margin_bottom = 4
+custom_constants/margin_bottom = 0
 script = ExtResource( 6 )
 
 [node name="HelpText" type="RichTextLabel" parent="HelpPanel"]
 margin_left = 4.0
-margin_top = 4.0
 margin_right = 316.0
-margin_bottom = 87.0
+margin_bottom = 1.0
 focus_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -233,4 +241,5 @@ anims/RESET = SubResource( 5 )
 anims/show = SubResource( 4 )
 
 [connection signal="pressed" from="Code/Sidebar/FileMenu/AddScriptButton" to="." method="_on_AddScriptButton_pressed"]
+[connection signal="pressed" from="Code/Sidebar/FileMenu/RemoveScriptButton" to="." method="_on_RemoveScriptButton_pressed"]
 [connection signal="pressed" from="Code/Sidebar/HelpButton" to="HelpPanel" method="toggle"]

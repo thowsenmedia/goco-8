@@ -1,6 +1,7 @@
 class_name CoderTree extends VBoxContainer
 
-signal request_open(file)
+signal request_open(item, file)
+signal item_renamed(item, old_path, new_path)
 
 const CoderTreeItemScene = preload("res://Coder/CoderTreeItem.tscn")
 
@@ -19,6 +20,19 @@ func _ready():
 	else:
 		ES.error("Failed to open user://, error: " + str(err))
 
+
+func grab_focus():
+	if get_child_count() > 1:
+		if is_instance_valid(focused_item) and focused_item:
+			focused_item.grab_focus()
+		else:
+			get_child(1).grab_focus()
+
+func toggle():
+	if is_visible:
+		hide()
+	else:
+		show()
 
 func set_project(p:Project):
 	self.project = p
@@ -69,6 +83,7 @@ func create_item(type, path) -> CoderTreeItem:
 	item.type = type
 	item.path = path
 	item.connect("selected", self, "_on_select_item", [item])
+	item.connect("file_renamed", self, "_on_rename_item", [item])
 	
 	add_child(item)
 	return item
@@ -80,27 +95,18 @@ func add_file(file:String) -> CoderTreeItem:
 	return create_item(CoderTreeItem.TYPE.FILE, file)
 
 func new_file():
-	var item = create_item(CoderTreeItem.TYPE.FILE, "")
-	item.path = project.get_code_dir() + "/new.gd"
-	item.start_edit()
-	return item
+	return create_item(CoderTreeItem.TYPE.FILE, "")
 
 func _on_select_item(item:CoderTreeItem):
+	focused_item = item
+	
 	if item.type == CoderTreeItem.TYPE.DIRECTORY:
 		set_folder(item.path)
 	else:
 		var file = directory.get_current_dir() + "/" + item.path
-		emit_signal("request_open", file)
+		emit_signal("request_open", item, file)
 
-func grab_focus():
-	if get_child_count() > 1:
-		if is_instance_valid(focused_item) and focused_item:
-			focused_item.grab_focus()
-		else:
-			get_child(1).grab_focus()
-
-func toggle():
-	if is_visible:
-		hide()
-	else:
-		show()
+func _on_rename_item(old_path, new_path, item:CoderTreeItem):
+	var old_file = directory.get_current_dir() + "/" + old_path.trim_prefix("/")
+	var file = directory.get_current_dir() + "/" + new_path.trim_prefix("/")
+	emit_signal("item_renamed", item, old_file, file)

@@ -39,6 +39,8 @@ func _ready():
 	
 	if ES.scene_arguments.has("open"):
 		open_project(ES.scene_arguments.open)
+	
+	get_window().grab_focus()
 
 
 func _input(event: InputEvent):
@@ -124,7 +126,8 @@ func get_window() -> Node:
 
 
 func go_to_window(name:String):
-	get_window().release_focus()
+	var window = get_window()
+	window.release_focus()
 	
 	var num = windows.find(name)
 	current_window_number = num
@@ -158,7 +161,7 @@ func _process(delta):
 			next_window()
 		elif Input.is_action_just_released("window_previous"):
 			prev_window()
-	
+		
 	if rect_position.x != target_offset:
 		rect_position.x = lerp(rect_position.x, target_offset, 0.1)
 	else:

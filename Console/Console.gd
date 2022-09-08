@@ -2,10 +2,14 @@ class_name Console extends PanelContainer
 
 const ARGUMENT_PATTERN = '("(?:[^"\\\\]|\\\\.)*")|(\'(?:[^\'\\\\]|\\\\.)*\')|([^ ]+)'
 
+var has_focus := false
+
 var argument_regex = RegEx.new()
 
-onready var output = $VBoxContainer/Output
-onready var input = $VBoxContainer/HBoxContainer/Input
+onready var scroll = $ScrollContainer
+onready var output = $ScrollContainer/VBoxContainer/Output
+onready var input = $ScrollContainer/VBoxContainer/Input/LineEdit
+onready var inputPrefix = $ScrollContainer/VBoxContainer/Input/InputPrefix
 onready var gocoNet = $GocoNet
 
 var commands := {}
@@ -14,19 +18,18 @@ var welcome_message = """[center]
 
 [color=gray]Copyright (c) 2022 - Thowsen Media
 Version: 0.5.1[/color]
+[color=teal]goco8.thowsenmedia.com[/color]
 [color=gray]--------------------------------------------------[/color]
 [/center]
 
 Type [color=yellow]help[/color] for a list of commands, or [color=yellow]quickstart[/color] for a quick introduction.
-
 Type [color=yellow]browse[/color] to browse games. To upload games, register for an account at [color=teal]goco8.thowsenmedia.com[/color],
-then you can 'login [username] [password]', and 'upload [your_game]' (first you need to 'pack [the_game]').
-
-Website: [color=teal]goco8.thowsenmedia.com[/color].
-Source: [color=teal]github.com/thowsenmedia/goco-8[/color].
-"""
+then you can 'login [username] [password]', and 'upload [your_game]' (first you need to 'pack [the_game]')."""
 
 var dir:String = "user://"
+
+var shouldScroll := false
+var scrollTimer := 0.0
 
 func _init():
 	ES.console = self
@@ -50,31 +53,57 @@ func _ready():
 	add_command("login", LoginCommand.new())
 	add_command("upload", UploadCommand.new())
 	
+	scroll.get_node("_v_scroll").hide()
+	
 	output.write(welcome_message)
-	input.grab_focus()
+	
+	if not ES.editor:
+		has_focus = true
+	
+	if has_focus:
+		input.grab_focus()
 
-func grab_focus():
-	input.grab_focus()
 
 func add_command(command_name: String, command:ConsoleCommand):
 	commands[command_name] = command
 
+func grab_focus():
+	input.grab_focus()
+	has_focus = true
 
 func write(text:String):
 	output.write(text)
+	shouldScroll = true
+	scrollTimer = 0.0
 
-
-func _process(delta):
-	if Input.is_action_pressed("ui_up"):
-		output.scroll_vertical -= 1
-	elif Input.is_action_pressed("ui_down"):
-		output.scroll_vertical += 1
+func _input(event):
+	if not has_focus:
+		return
 	
-	if Input.is_action_just_released("ui_accept"):
+	var handled = false
+	
+	if event.is_action("ui_up") and event.pressed:
+		scroll.scroll_vertical -= 1
+		handled = true
+	elif event.is_action("ui_down") and event.pressed:
+		scroll.scroll_vertical += 1
+		handled = true
+	elif event.is_action("ui_accept") and event.pressed:
 		var command = input.text
 		if command:
 			input.text = ""
 			process_command(command)
+		handled = true
+	
+	if handled:
+		get_tree().set_input_as_handled()
+
+func _process(delta):
+	if shouldScroll:
+		scrollTimer += delta
+		if scrollTimer >= 0.01:
+			scroll.ensure_control_visible(input)
+			shouldScroll = false
 
 func run(command:String, args:Array):
 	if commands.has(command):
@@ -83,9 +112,9 @@ func run(command:String, args:Array):
 	push_warning("Unknown command " + command)
 	return null
 
-func process_command(string:String):
-	output.write("->" + string)
-	var split = Array(string.split(" ", false, 1))
+func process_command(text:String):
+	output.write("\n[color=yellow]->[/color] " + text + "\n")
+	var split = Array(text.split(" ", false, 1))
 	var command = split.pop_front()
 	
 	var args = []
@@ -103,3 +132,10 @@ func process_command(string:String):
 			output.write("[color=red]Command failed.[/color]")
 	else:
 		output.write("[color=red]Unknown command '" + command + "'...[/color]")
+	
+	shouldScroll = true
+	scrollTimer = 0
+
+
+func _on_input_text_changed(new_text):
+	scroll.ensure_control_visible(input)

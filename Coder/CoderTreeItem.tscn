@@ -23,6 +23,7 @@ anti_aliasing = false
 [node name="TreeItem" type="HBoxContainer"]
 margin_right = 72.0
 margin_bottom = 24.0
+focus_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource( 2 )
 script = ExtResource( 1 )

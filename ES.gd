@@ -2,6 +2,10 @@ extends Node
 
 const VERSION := "0.5.1"
 
+enum COLORS {
+	
+}
+
 var scene_arguments := {}
 var current_scene = null
 

@@ -3,6 +3,7 @@ class_name Coder extends VBoxContainer
 const Editor = preload("res://Coder/Editor.tscn")
 
 export(bool) var testing:bool = false
+export(String) var testing_project_name := "rpg"
 
 var has_focus:bool = false
 
@@ -22,10 +23,14 @@ func _draw():
 
 func _ready():
 	$Code/Sidebar/Tree.connect("request_open", self, "_on_request_open")
+	$Code/Sidebar/Tree.connect("item_renamed", self, "_on_tree_item_renamed")
+	
 	if testing:
-		var p = Project.new("blah")
+		var p = Project.new(testing_project_name)
 		p.load_data()
 		_open_project(p)
+		grab_focus()
+		has_focus = true
 	
 
 func _open_project(project:Project):
@@ -75,6 +80,9 @@ func release_focus():
 
 
 func _input(event:InputEvent):
+	if not has_focus:
+		return
+	
 	if event.is_action("ctrl_tab") and event.pressed:
 		if $Code/Sidebar.is_visible:
 			$Code/Sidebar.hide()
@@ -94,12 +102,25 @@ func is_file_open(path:String):
 	return false
 
 
-func _on_request_open(path:String):
+func _on_request_open(item, path:String):
 	if not is_file_open(path):
 		open_file(path)
+	
+	var editor = $Code/EditorTabs.get_current_tab_control()
+	if editor.file != path:
+		$Code/EditorTabs.current_tab = get_editor_tab_from_file(path).get_index()
+
+
+func get_editor_tab_from_file(path:String) -> Node:
+	var tab_name = Array(path.split("/")).pop_back().trim_suffix('.gd')
+	for editor in $Code/EditorTabs.get_children():
+		if editor.file == path:
+			return editor
+	return null
 
 
 func open_file(path:String):
+	print("Opening " + path)
 	var f = File.new()
 	
 	var err = f.open(path, File.READ)
@@ -110,24 +131,47 @@ func open_file(path:String):
 	var text = f.get_as_text()
 	f.close()
 	
+	var tab_title = Array(path.split("/")).pop_back().trim_suffix('.gd')
 	var tab = Editor.instance()
 	tab.file = path
 	tab.text = text
 	
-	var tab_name = Array(path.split("/")).pop_back()
-	
 	$Code/EditorTabs.add_child(tab)
-	$Code/EditorTabs.set_tab_title(tab.get_index(), tab_name)
+	$Code/EditorTabs.set_tab_title(tab.get_index(), tab_title)
 	$Code/EditorTabs.current_tab = tab.get_index()
 	$Code/EditorTabs.tabs_visible = true
 
 
+func _on_tree_item_renamed(item, file_name:String, new_file_name:String):
+	var err = $Code/Sidebar/Tree.directory.rename(file_name, new_file_name)
+	if err:
+		print("failed to renamed " + file_name + " TO " + new_file_name + ". Err: " + str(err))
+		item.path = file_name
+		return
+	
+	var tab = get_editor_tab_from_file(file_name)
+	tab.file = new_file_name
+	var tab_title = Array(new_file_name.split("/")).pop_back().trim_suffix('.gd')
+	$Code/EditorTabs.set_tab_title(tab.get_index(), tab_title)
+	
+	print("renamed " + file_name + " > " + new_file_name)
+
+
 func _on_AddScriptButton_pressed():
-	var item:Node = $Code/Sidebar/Tree.new_file()
+	var item:Node = $Code/Sidebar/Tree.add_file("")
 	item.connect("file_renamed", self, "_on_new_file_named", [item])
+	item.start_edit()
 
 
 func _on_new_file_named(old_path, new_path, item):
+	if old_path == "" and new_path == "":
+		disconnect("file_renamed", self, "_on_new_file_named")
+		print("cancelled new file creation")
+		return
+	
+	old_path = $Code/Sidebar/Tree.directory.get_current_dir() + "/" + old_path
+	new_path = $Code/Sidebar/Tree.directory.get_current_dir() + "/" + new_path
+
 	if not new_path.ends_with(".gd"):
 		new_path = new_path + ".gd"
 	
@@ -142,5 +186,10 @@ func _on_new_file_named(old_path, new_path, item):
 	item.disconnect("file_renamed", self, "_on_new_file_named")
 	
 	if not err:
-		item.path = new_path
 		open_file(new_path)
+
+
+func _on_RemoveScriptButton_pressed():
+	if $Code/Sidebar/Tree.focused_item:
+		var item = $Code/Sidebar/Tree.focused_item
+		print("Deleting " + item.path)

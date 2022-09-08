@@ -53,15 +53,14 @@ func _ready():
 	add_command("login", LoginCommand.new())
 	add_command("upload", UploadCommand.new())
 	
-	scroll.get_node("_v_scroll").hide()
-	
-	output.write(welcome_message)
+	write(welcome_message)
 	
 	if not ES.editor:
 		has_focus = true
 	
 	if has_focus:
 		input.grab_focus()
+	
 
 
 func add_command(command_name: String, command:ConsoleCommand):
@@ -83,10 +82,10 @@ func _input(event):
 	var handled = false
 	
 	if event.is_action("ui_up") and event.pressed:
-		scroll.scroll_vertical -= 1
+		scroll.scroll_vertical -= 14
 		handled = true
 	elif event.is_action("ui_down") and event.pressed:
-		scroll.scroll_vertical += 1
+		scroll.scroll_vertical += 14
 		handled = true
 	elif event.is_action("ui_accept") and event.pressed:
 		var command = input.text

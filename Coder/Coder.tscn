@@ -211,27 +211,27 @@ bbcode_text = "[center]FUNCTIONS[/center]
 	
 [color=gray] draw_sprite(tileset:String, tile:int, x:int, y:int, w:int, h:int[/color]
 	draw a single tile/sprite from the given tileset at x and y position. w and h (width & height) are optional arguments."
-text = "FUNCTIONS
+text = "[center]FUNCTIONS[/center]
 
-btn(action:String, player_id:int = 0)
+[color=gray]btn(action:String, player_id:int = 0)[/color]
 	returns a ButtonState object, containing three boolean properties: down, pressed and released.
 	
- btn_[action](player_id:int = 0)
+[color=gray] btn_[action](player_id:int = 0)[/color]
 	Shorthand for the btn() function. For example, btn_a(2) returns the state of the A button for player #2.
 	
- get_camera()
+[color=gray] get_camera()[/color]
 	returns the main camera
 
- get_tileset(name:String)
+[color=gray] get_tileset(name:String)[/color]
 	returns a given Tileset.
 	
- get_map(name:String
+[color=gray] get_map(name:String[/color]
 	returns a given map
 
- draw_map(name:String, pos_x: int, pos_y: int)
+[color=gray] draw_map(name:String, pos_x: int, pos_y: int)[/color]
 	draw the given map from the top left corner,starting at the given position.
 	
- draw_sprite(tileset:String, tile:int, x:int, y:int, w:int, h:int
+[color=gray] draw_sprite(tileset:String, tile:int, x:int, y:int, w:int, h:int[/color]
 	draw a single tile/sprite from the given tileset at x and y position. w and h (width & height) are optional arguments."
 selection_enabled = true
 

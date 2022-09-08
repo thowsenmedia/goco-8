@@ -62,13 +62,16 @@ func _ready():
 		input.grab_focus()
 	
 
-
 func add_command(command_name: String, command:ConsoleCommand):
 	commands[command_name] = command
 
 func grab_focus():
 	input.grab_focus()
 	has_focus = true
+
+func release_focus():
+	.release_focus()
+	has_focus = false
 
 func write(text:String):
 	output.write(text)
@@ -84,6 +87,7 @@ func _input(event):
 	if event.is_action("ui_up") and event.pressed:
 		scroll.scroll_vertical -= 14
 		handled = true
+		print("scrolling")
 	elif event.is_action("ui_down") and event.pressed:
 		scroll.scroll_vertical += 14
 		handled = true

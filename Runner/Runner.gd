@@ -5,6 +5,8 @@ var project:Project
 var log_messages := ""
 
 func _ready():
+	get_viewport().render_target_clear_mode = Viewport.CLEAR_MODE_NEVER
+	
 	# load either a packed project, or a project
 	if ES.scene_arguments.has("packed_project"):
 		ES.echo("Running packed project...")
@@ -27,7 +29,7 @@ func _ready():
 		project.load_data()
 		var scripts = project.get_scripts()
 		for script in scripts:
-			var clazz = ResourceLoader.load(project.get_code_dir() + "/" + script, "", false)
+			var clazz = ResourceLoader.load(project.get_code_dir() + "/" + script, "", true)
 			var instance = clazz.new()
 			instance.add_to_group("script")
 			instance._project = project

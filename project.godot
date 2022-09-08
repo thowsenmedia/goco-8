@@ -407,10 +407,10 @@ gdscript/warnings/unused_variable=false
 
 window/size/width=320
 window/size/height=240
-window/size/test_width=640
-window/size/test_height=480
+window/size/test_width=960
+window/size/test_height=720
 mouse_cursor/custom_image="res://UI/cursor_default.png"
-window/stretch/mode="2d"
+window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
 [editor_plugins]
@@ -420,6 +420,7 @@ enabled=PoolStringArray( "res://addons/godot_sfxr/plugin.cfg" )
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true
+theme/custom="res://UI/Theme.tres"
 
 [input]
 

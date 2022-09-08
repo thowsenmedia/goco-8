@@ -92,6 +92,7 @@ theme = ExtResource( 2 )
 custom_constants/separation = 0
 script = ExtResource( 1 )
 testing = true
+testing_project_name = "test"
 
 [node name="Code" type="HBoxContainer" parent="."]
 margin_right = 320.0
@@ -112,19 +113,19 @@ script = ExtResource( 5 )
 
 [node name="FileMenu" type="HBoxContainer" parent="Code/Sidebar"]
 margin_right = 41.0
-margin_bottom = 17.0
+margin_bottom = 19.0
 custom_constants/separation = 1
 
 [node name="AddScriptButton" type="Button" parent="Code/Sidebar/FileMenu"]
 margin_right = 20.0
-margin_bottom = 17.0
+margin_bottom = 19.0
 rect_min_size = Vector2( 20, 0 )
 text = "+"
 
 [node name="RemoveScriptButton" type="Button" parent="Code/Sidebar/FileMenu"]
 margin_left = 21.0
 margin_right = 41.0
-margin_bottom = 17.0
+margin_bottom = 19.0
 rect_min_size = Vector2( 20, 0 )
 text = "X"
 
@@ -136,9 +137,9 @@ anims/hide = SubResource( 2 )
 anims/show = SubResource( 3 )
 
 [node name="Tree" type="VBoxContainer" parent="Code/Sidebar"]
-margin_top = 17.0
+margin_top = 19.0
 margin_right = 41.0
-margin_bottom = 17.0
+margin_bottom = 19.0
 focus_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -147,7 +148,7 @@ custom_constants/separation = 0
 script = ExtResource( 3 )
 
 [node name="HelpButton" type="Button" parent="Code/Sidebar"]
-margin_top = 222.0
+margin_top = 220.0
 margin_right = 41.0
 margin_bottom = 239.0
 size_flags_vertical = 10
@@ -211,27 +212,27 @@ bbcode_text = "[center]FUNCTIONS[/center]
 	
 [color=gray] draw_sprite(tileset:String, tile:int, x:int, y:int, w:int, h:int[/color]
 	draw a single tile/sprite from the given tileset at x and y position. w and h (width & height) are optional arguments."
-text = "[center]FUNCTIONS[/center]
+text = "FUNCTIONS
 
-[color=gray]btn(action:String, player_id:int = 0)[/color]
+btn(action:String, player_id:int = 0)
 	returns a ButtonState object, containing three boolean properties: down, pressed and released.
 	
-[color=gray] btn_[action](player_id:int = 0)[/color]
+ btn_[action](player_id:int = 0)
 	Shorthand for the btn() function. For example, btn_a(2) returns the state of the A button for player #2.
 	
-[color=gray] get_camera()[/color]
+ get_camera()
 	returns the main camera
 
-[color=gray] get_tileset(name:String)[/color]
+ get_tileset(name:String)
 	returns a given Tileset.
 	
-[color=gray] get_map(name:String[/color]
+ get_map(name:String
 	returns a given map
 
-[color=gray] draw_map(name:String, pos_x: int, pos_y: int)[/color]
+ draw_map(name:String, pos_x: int, pos_y: int)
 	draw the given map from the top left corner,starting at the given position.
 	
-[color=gray] draw_sprite(tileset:String, tile:int, x:int, y:int, w:int, h:int[/color]
+ draw_sprite(tileset:String, tile:int, x:int, y:int, w:int, h:int
 	draw a single tile/sprite from the given tileset at x and y position. w and h (width & height) are optional arguments."
 selection_enabled = true
 

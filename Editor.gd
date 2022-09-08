@@ -33,6 +33,8 @@ func _ready():
 	add_window("Mapper", mapper)
 	add_window("SFXer", sfxer)
 	
+	get_viewport().render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
+	
 	if ES.scene_arguments.has("launched_by_runner"):
 		ES.push_log_to_console()
 		ES.clear_log_file()
@@ -138,20 +140,20 @@ func go_to_window(name:String):
 
 
 func next_window():
-	current_window_number += 1
-	if current_window_number > windows.size() - 1:
-		current_window_number = 0
+	var next = current_window_number + 1
+	if next > windows.size() - 1:
+		next = 0
 	
-	var name = windows[current_window_number]
+	var name = windows[next]
 	go_to_window(name)
 
 
 func prev_window():
-	current_window_number -= 1
-	if current_window_number < 0:
-		current_window_number = windows.size() - 1
+	var prev = current_window_number - 1
+	if prev < 0:
+		prev = windows.size() - 1
 	
-	var name = windows[current_window_number]
+	var name = windows[prev]
 	go_to_window(name)
 
 

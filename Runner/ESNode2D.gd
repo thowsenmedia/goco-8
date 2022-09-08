@@ -104,3 +104,16 @@ func draw_sprite(tileset_name:String, tile_index:int, x:int, y:int, w:int = -1, 
 	var src_rect = tileset.get_region(tile_index)
 	
 	draw_texture_rect_region(tileset.texture, rect, src_rect)
+
+
+func set_pixel(x:int, y:int, color:Color):
+	frect(x,y,1,1, color)
+
+func brect(x:int, y:int, w:int, h:int, color:Color, width:int = 1):
+	draw_rect(Rect2(x, y, w, h), color, false, width)
+
+func frect(x:int, y:int, w:int, h:int, color:Color):
+	draw_rect(Rect2(x, y, w, h), color, true)
+
+func cls():
+	get_viewport().render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME

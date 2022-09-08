@@ -23,13 +23,17 @@ class _ButtonState:
 	var down:bool = false
 
 func _ready():
+	set_process(false)
 	_start()
 
 func _start():
 	pass
 
+func _tick(delta):
+	pass
+
 func script(script_name) -> ESNode2D:
-	return _runner.scripts[script_name]
+	return _runner.script(script_name)
 
 func echo(message:String):
 	_runner.echo(message)
@@ -103,11 +107,18 @@ func get_tileset(tileset_name:String) -> Tileset:
 func get_map(map_name:String) -> Map:
 	return _project.maps[map_name]
 
+func get_tile(map_name:String, layer_name_or_id, x:int, y:int) -> MapTile:
+	return _project.maps[map_name].get_layer(layer_name_or_id).get_tile_v(x, y)
+
+func text_width(text: String) -> float:
+	return _FONT_DEFAULT.get_string_size(text).x
+
+func text_height(text: String) -> float:
+	return _FONT_DEFAULT.get_string_size(text).y
 
 func draw_text(text: String, pos_x: int, pos_y: int, color:Color = Color.white):
 	var h = _FONT_DEFAULT.get_height()
 	draw_string(_FONT_DEFAULT, Vector2(pos_x, pos_y + h), text, color)
-
 
 func draw_map(map_name:String, pos_x:int, pos_y:int):
 	var map = get_map(map_name)

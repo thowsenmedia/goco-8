@@ -39,14 +39,14 @@ func _ready():
 		if project.has_meta("autoload"):
 			for script_name in project.get_meta("autoload"):
 				print("autoloading " + script_name)
-				add_child(load_script(script_name))
+				add_child(script(script_name))
 	
 #	# start all scripts
 #	for child in get_children():
 #		if child.is_in_group("script") and child.has_method("_start"):
 #			child._start()
 
-func load_script(script_name:String):
+func script(script_name:String):
 	var instance = scripts[script_name].new()
 	
 	if instance is Node:
@@ -54,6 +54,7 @@ func load_script(script_name:String):
 	
 	if instance is ESNode2D:
 		instance._project = project
+		instance._runner = self
 	
 	return instance
 
@@ -65,8 +66,16 @@ func echo(what:String):
 
 func _process(delta):
 	for child in get_children():
-		if child.is_in_group("script") and child.has_method("_draw"):
-			child.update()
+		if child.is_in_group("script"):
+			_tick_scripts(child, delta)
+
+
+func _tick_scripts(node, delta):
+	node._tick(delta)
+	node.update()
+	for child in node.get_children():
+		if child.is_in_group("script"):
+			_tick_scripts(child, delta)
 
 
 func _input(event):

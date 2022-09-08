@@ -14,7 +14,7 @@ var code_template = """extends ESNode2D
 func _start():
 	pass
 
-func _process(delta):
+func _tick(delta):
 	pass
 
 func _draw():
@@ -45,6 +45,15 @@ func _open_project(project:Project):
 			if not is_file_open(file):
 				open_file(file)
 	
+	if project.has_meta("editor_coder_current_tab_id"):
+		var tabID = project.get_meta("editor_coder_current_tab_id")
+		$Code/EditorTabs.current_tab = tabID
+	
+	if project.has_meta("editor_coder_current_line"):
+		var line = project.get_meta("editor_coder_current_line")
+		var editor:TextEdit = $Code/EditorTabs.get_current_tab_control()
+		editor.cursor_set_line(line)
+	
 	$Code/Sidebar/FileMenu/AddScriptButton.disabled = false
 
 
@@ -64,7 +73,13 @@ func _before_save_project(project:Project):
 	
 	if tabs.size() > 0:
 		project.put_meta("editor_coder_tabs", tabs)
-
+		var tabID = $Code/EditorTabs.current_tab
+		var tab:TextEdit = $Code/EditorTabs.get_tab_control(tabID)
+		project.put_meta("editor_coder_current_tab_id", tabID)
+		
+		# save current line as well
+		var line = tab.cursor_get_line()
+		project.put_meta("editor_coder_current_line", line)
 
 func _save_project(project:Project):
 	for editor in $Code/EditorTabs.get_children():
@@ -187,7 +202,7 @@ func _on_new_file_named(old_path, new_path, item):
 		f.close()
 	
 	item.disconnect("file_renamed", self, "_on_new_file_named")
-	
+	item.get_node("Autoload").show()
 	if not err:
 		open_file(new_path)
 

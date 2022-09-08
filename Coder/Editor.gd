@@ -12,7 +12,7 @@ const COLORS = {
 const KEYWORDS = [
 	'var', 'func','return','void','break','continue',
 	'class','class_name','extends',
-	'if','elif','else','for','while','yield'
+	'if','elif','else','for','while','yield','enum'
 ]
 
 const CONSTANTS = [

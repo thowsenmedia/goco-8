@@ -55,10 +55,16 @@ func layer_name_exists(name:String) -> bool:
 	return false
 
 
-func get_layer(name:String):
-	for layer in layers:
-		if layer.name == name:
-			return layer
+func get_layer(name_or_id):
+	if name_or_id is String:
+		for layer in layers:
+			if layer.name == name_or_id:
+				return layer
+	else:
+		if name_or_id < 0 or name_or_id >= layers.size():
+			return null
+		
+		return layers[name_or_id]
 	
 	return null
 

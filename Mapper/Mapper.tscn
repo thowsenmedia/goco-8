@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Mapper/Mapper.gd" type="Script" id=1]
 [ext_resource path="res://Mapper/MapEditor.gd" type="Script" id=2]
@@ -7,7 +7,6 @@
 [ext_resource path="res://Mapper/MapRenderer.gd" type="Script" id=6]
 [ext_resource path="res://Spriter/TilesetSelector.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Mapper/NewMapLayerPopup.gd" type="Script" id=8]
-[ext_resource path="res://Mapper/LayerItem.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Mapper/NewMapPopup.gd" type="Script" id=10]
 
 [sub_resource type="StyleBoxFlat" id=1]
@@ -36,27 +35,27 @@ custom_constants/separation = 0
 
 [node name="MapList" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
 margin_right = 320.0
-margin_bottom = 17.0
+margin_bottom = 19.0
 
 [node name="MapListButtons" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MapList"]
-margin_bottom = 17.0
+margin_bottom = 19.0
 
 [node name="AddMapButton" type="Button" parent="VBoxContainer/VBoxContainer/MapList"]
 margin_left = 4.0
 margin_right = 24.0
-margin_bottom = 17.0
+margin_bottom = 19.0
 rect_min_size = Vector2( 20, 0 )
 size_flags_horizontal = 2
 text = "+"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer/VBoxContainer"]
-margin_top = 17.0
+margin_top = 19.0
 margin_right = 320.0
-margin_bottom = 21.0
+margin_bottom = 23.0
 custom_styles/separator = SubResource( 1 )
 
 [node name="MapEditor" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
-margin_top = 21.0
+margin_top = 23.0
 margin_right = 320.0
 margin_bottom = 240.0
 size_flags_horizontal = 3
@@ -66,7 +65,7 @@ script = ExtResource( 2 )
 
 [node name="Map" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MapEditor"]
 margin_right = 239.0
-margin_bottom = 219.0
+margin_bottom = 217.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
@@ -74,7 +73,7 @@ custom_constants/separation = 0
 
 [node name="MapRenderer" type="Control" parent="VBoxContainer/VBoxContainer/MapEditor/Map"]
 margin_right = 239.0
-margin_bottom = 146.0
+margin_bottom = 144.0
 rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -101,9 +100,9 @@ margin_bottom = 16.0
 text = "0,0"
 
 [node name="Tilesets" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MapEditor/Map"]
-margin_top = 146.0
+margin_top = 144.0
 margin_right = 239.0
-margin_bottom = 219.0
+margin_bottom = 217.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -143,7 +142,7 @@ script = ExtResource( 5 )
 [node name="MapOptions" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MapEditor"]
 margin_left = 240.0
 margin_right = 320.0
-margin_bottom = 219.0
+margin_bottom = 217.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MapEditor/MapOptions"]
@@ -155,31 +154,26 @@ align = 1
 [node name="LayersHeader" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MapEditor/MapOptions"]
 margin_top = 17.0
 margin_right = 80.0
-margin_bottom = 34.0
+margin_bottom = 36.0
 
 [node name="LayersTitle" type="Label" parent="VBoxContainer/VBoxContainer/MapEditor/MapOptions/LayersHeader"]
-margin_top = 2.0
+margin_top = 3.0
 margin_right = 37.0
-margin_bottom = 15.0
+margin_bottom = 16.0
 text = "Layers:"
 
 [node name="AddLayerButton" type="Button" parent="VBoxContainer/VBoxContainer/MapEditor/MapOptions/LayersHeader"]
-margin_left = 63.0
+margin_left = 62.0
 margin_right = 80.0
-margin_bottom = 17.0
+margin_bottom = 19.0
 rect_min_size = Vector2( 17, 17 )
 size_flags_horizontal = 10
 text = "+"
 
 [node name="LayersList" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MapEditor/MapOptions"]
-margin_top = 38.0
+margin_top = 40.0
 margin_right = 80.0
-margin_bottom = 55.0
-
-[node name="LayerItem" parent="VBoxContainer/VBoxContainer/MapEditor/MapOptions/LayersList" instance=ExtResource( 9 )]
-pressed = true
-text = "bg"
-align = 0
+margin_bottom = 40.0
 
 [node name="NewMapLayerPopup" type="WindowDialog" parent="."]
 anchor_left = 0.5
@@ -206,7 +200,7 @@ custom_constants/margin_bottom = 4
 margin_left = 4.0
 margin_top = 4.0
 margin_right = 124.0
-margin_bottom = 48.0
+margin_bottom = 50.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 

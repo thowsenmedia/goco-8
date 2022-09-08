@@ -5,7 +5,7 @@ export(bool) var testing:bool = false
 onready var tilesetSelector = $VBoxContainer/Tilesets/Panel/TilesetSelector
 onready var tilesetControl:TilesetControl = $VBoxContainer/Tilesets/TilesetContainer/TilesetControl
 onready var canvas:Canvas = $VBoxContainer/Main/Painter/VBoxContainer/Canvas
-onready var palette:PaletteSelector = $VBoxContainer/Main/PaletteSelector
+onready var palette:PaletteSelector = $VBoxContainer/Main/Tools/PaletteSelector
 onready var newTilesetPopup = $NewTilesetPopup
 onready var addTilesetButton = $VBoxContainer/Tilesets/Panel/TilesetSelector/AddTilesetButton
 

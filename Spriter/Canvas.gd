@@ -216,3 +216,11 @@ func _draw():
 			draw_texture_rect(image_texture, Rect2(pos, img_size * zoom), false)
 			
 		
+
+
+func _on_paint_tool_pressed():
+	selected_tool = "pencil"
+
+
+func _on_Fill_tool_pressed():
+	selected_tool = "fill"

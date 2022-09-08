@@ -195,7 +195,8 @@ func _on_new_file_named(old_path, new_path, item):
 func _on_RemoveScriptButton_pressed():
 	if $Code/Sidebar/Tree.focused_item:
 		var item = $Code/Sidebar/Tree.focused_item
-		print("Deleting " + item.path)
+		
+		item.queue_free()
 
 
 func _on_item_autoload_changed(item, file:String, autoload:bool):

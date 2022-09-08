@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://UI/Theme.tres" type="Theme" id=1]
 [ext_resource path="res://Spriter/PaletteSelector.gd" type="Script" id=2]
@@ -6,8 +6,19 @@
 [ext_resource path="res://Spriter/Spriter.gd" type="Script" id=4]
 [ext_resource path="res://Spriter/Painter.gd" type="Script" id=5]
 [ext_resource path="res://Spriter/TilesetSelector.tscn" type="PackedScene" id=6]
+[ext_resource path="res://UI/editor_icons.png" type="Texture" id=7]
 [ext_resource path="res://Spriter/Tileset/TilesetControl.gd" type="Script" id=8]
 [ext_resource path="res://Spriter/NewTilesetPopup.gd" type="Script" id=10]
+
+[sub_resource type="ButtonGroup" id=3]
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 7 )
+region = Rect2( 0, 0, 8, 8 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 7 )
+region = Rect2( 8, 0, 8, 8 )
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.133333, 0.133333, 0.133333, 1 )
@@ -33,14 +44,14 @@ custom_constants/separation = 0
 
 [node name="TopBar" type="PanelContainer" parent="VBoxContainer"]
 margin_right = 320.0
-margin_bottom = 4.0
+margin_bottom = 14.0
 size_flags_horizontal = 3
 
 [node name="HBox" type="HBoxContainer" parent="VBoxContainer/TopBar"]
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 318.0
-margin_bottom = 2.0
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 313.0
+margin_bottom = 7.0
 
 [node name="Label" type="Label" parent="VBoxContainer/TopBar/HBox"]
 visible = false
@@ -49,9 +60,9 @@ margin_bottom = 13.0
 text = ":/Spriter"
 
 [node name="Main" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 4.0
+margin_top = 14.0
 margin_right = 320.0
-margin_bottom = 159.0
+margin_bottom = 157.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.5
@@ -59,7 +70,7 @@ custom_constants/separation = 0
 
 [node name="Painter" type="Control" parent="VBoxContainer/Main"]
 margin_right = 272.0
-margin_bottom = 155.0
+margin_bottom = 143.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 5 )
@@ -71,7 +82,7 @@ custom_constants/separation = 0
 
 [node name="Canvas" type="Control" parent="VBoxContainer/Main/Painter/VBoxContainer"]
 margin_right = 272.0
-margin_bottom = 155.0
+margin_bottom = 143.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 3 )
@@ -92,10 +103,15 @@ margin_right = 64.0
 margin_bottom = 17.0
 text = "#0"
 
-[node name="PaletteSelector" type="Control" parent="VBoxContainer/Main"]
+[node name="Tools" type="VBoxContainer" parent="VBoxContainer/Main"]
 margin_left = 272.0
 margin_right = 320.0
-margin_bottom = 155.0
+margin_bottom = 143.0
+custom_constants/separation = 0
+
+[node name="PaletteSelector" type="Control" parent="VBoxContainer/Main/Tools"]
+margin_right = 48.0
+margin_bottom = 96.0
 rect_min_size = Vector2( 48, 96 )
 script = ExtResource( 2 )
 bg_color = Color( 0.231373, 0.231373, 0.231373, 1 )
@@ -103,29 +119,67 @@ palette = [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ), Color( 1, 1, 1, 1 ), Color
 swatch_size = 12
 rows = 8
 
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/Main/Tools"]
+margin_top = 96.0
+margin_right = 48.0
+margin_bottom = 115.0
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
+columns = 2
+
+[node name="Paint" type="Button" parent="VBoxContainer/Main/Tools/GridContainer"]
+margin_right = 20.0
+margin_bottom = 19.0
+toggle_mode = true
+pressed = true
+group = SubResource( 3 )
+icon = SubResource( 5 )
+icon_align = 1
+
+[node name="Fill" type="Button" parent="VBoxContainer/Main/Tools/GridContainer"]
+margin_left = 20.0
+margin_right = 40.0
+margin_bottom = 19.0
+toggle_mode = true
+group = SubResource( 3 )
+icon = SubResource( 4 )
+icon_align = 1
+
 [node name="Tilesets" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 159.0
+margin_top = 157.0
 margin_right = 320.0
 margin_bottom = 240.0
 custom_constants/separation = 0
 
 [node name="Panel" type="PanelContainer" parent="VBoxContainer/Tilesets"]
 margin_right = 320.0
-margin_bottom = 17.0
+margin_bottom = 19.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 2 )
 
 [node name="TilesetSelector" parent="VBoxContainer/Tilesets/Panel" instance=ExtResource( 6 )]
+margin_bottom = 19.0
+
+[node name="ScrollContainer" parent="VBoxContainer/Tilesets/Panel/TilesetSelector" index="1"]
+margin_right = 301.0
+margin_bottom = 19.0
+
+[node name="ButtonList" parent="VBoxContainer/Tilesets/Panel/TilesetSelector/ScrollContainer" index="0"]
+margin_right = 301.0
 
 [node name="ScrollRight" parent="VBoxContainer/Tilesets/Panel/TilesetSelector" index="2"]
 margin_left = 304.0
 margin_right = 320.0
 
+[node name="AddTilesetButton" parent="VBoxContainer/Tilesets/Panel/TilesetSelector" index="3"]
+margin_left = 302.0
+margin_bottom = 19.0
+
 [node name="TilesetContainer" type="ScrollContainer" parent="VBoxContainer/Tilesets"]
-margin_top = 17.0
+margin_top = 19.0
 margin_right = 320.0
-margin_bottom = 81.0
+margin_bottom = 83.0
 rect_min_size = Vector2( 0, 64 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -263,6 +317,8 @@ margin_bottom = 17.0
 size_flags_horizontal = 3
 text = "Cancel"
 
-[connection signal="color_selected" from="VBoxContainer/Main/PaletteSelector" to="VBoxContainer/Main/Painter/VBoxContainer/Canvas" method="set_selected_color"]
+[connection signal="color_selected" from="VBoxContainer/Main/Tools/PaletteSelector" to="VBoxContainer/Main/Painter/VBoxContainer/Canvas" method="set_selected_color"]
+[connection signal="pressed" from="VBoxContainer/Main/Tools/GridContainer/Paint" to="VBoxContainer/Main/Painter/VBoxContainer/Canvas" method="_on_paint_tool_pressed"]
+[connection signal="pressed" from="VBoxContainer/Main/Tools/GridContainer/Fill" to="VBoxContainer/Main/Painter/VBoxContainer/Canvas" method="_on_Fill_tool_pressed"]
 
 [editable path="VBoxContainer/Tilesets/Panel/TilesetSelector"]

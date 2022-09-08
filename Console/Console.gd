@@ -17,7 +17,7 @@ var welcome_message = """[center]
 [color=purple]/    G O C O - 8    \\[/color]
 
 [color=gray]Copyright (c) 2022 - Thowsen Media
-Version: 0.7.0[/color]
+Version: 0.7.1[/color]
 [color=teal]goco8.thowsenmedia.com[/color]
 [color=gray]--------------------------------------------------[/color]
 [/center]

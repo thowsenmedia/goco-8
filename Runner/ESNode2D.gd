@@ -29,7 +29,7 @@ func _start():
 	pass
 
 func script(script_name) -> ESNode2D:
-	return _runner.load_script(script_name)
+	return _runner.scripts[script_name]
 
 func echo(message:String):
 	_runner.echo(message)
@@ -146,6 +146,9 @@ func brect(x:int, y:int, w:int, h:int, color:Color, width:int = 1):
 
 func frect(x:int, y:int, w:int, h:int, color:Color):
 	draw_rect(Rect2(x, y, w, h), color, true)
+
+func line(x: int, y: int, to_x:int, to_y:int, width: int = 1, color:Color = Color.white):
+	draw_line(Vector2(x, y), Vector2(to_x, to_y), color, width)
 
 func cls():
 	get_viewport().render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME

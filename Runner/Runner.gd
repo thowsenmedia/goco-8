@@ -48,7 +48,9 @@ func _ready():
 
 func load_script(script_name:String):
 	var instance = scripts[script_name].new()
-	instance.add_to_group("script")
+	
+	if instance is Node:
+		instance.add_to_group("script")
 	
 	if instance is ESNode2D:
 		instance._project = project

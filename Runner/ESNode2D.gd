@@ -3,7 +3,7 @@ class_name ESNode2D extends Node2D
 const _FONT_DEFAULT = preload("res://UI/fonts/5x7.tres")
 
 var _project:Project
-onready var _runner:Runner = $"/root/Runner"
+onready var _runner = $"/root/Runner"
 onready var _camera = $"/root/Runner/Camera"
 
 var _BUTTON_MAPPING = [
@@ -11,12 +11,25 @@ var _BUTTON_MAPPING = [
 	"b",
 	"x",
 	"y",
+	"l",
+	"r",
+	"select",
+	"start"
 ]
 
 class _ButtonState:
 	var just_pressed:bool = false
 	var just_released:bool = false
 	var down:bool = false
+
+func _ready():
+	_start()
+
+func _start():
+	pass
+
+func script(script_name) -> ESNode2D:
+	return _runner.load_script(script_name)
 
 func echo(message:String):
 	_runner.echo(message)
@@ -46,6 +59,18 @@ func btn_x(player_id:int = 0) -> _ButtonState:
 func btn_y(player_id:int = 0) -> _ButtonState:
 	return btn("y", player_id)
 
+func btn_l(player_id:int = 0) -> _ButtonState:
+	return btn("l", player_id)
+
+func btn_r(player_id:int = 0) -> _ButtonState:
+	return btn("r", player_id)
+	
+func btn_select(player_id:int = 0) -> _ButtonState:
+	return btn("select", player_id)
+
+func btn_start(player_id:int = 0) -> _ButtonState:
+	return btn("start", player_id)
+	
 func btn_left(player_id:int = 0) -> _ButtonState:
 	return btn("left", player_id)
 
@@ -58,10 +83,17 @@ func btn_up(player_id:int = 0) -> _ButtonState:
 func btn_down(player_id:int = 0) -> _ButtonState:
 	return btn("down", player_id)
 
-# get camera
-func get_camera():
+func get_camera() -> Camera2D:
 	return _camera
 
+# set camera zoom
+func camera(x:float, y:float, zoom = null):
+	_camera.position.x = x
+	_camera.position.y = y
+	
+	if zoom != null:
+		_camera.zoom.x = zoom
+		_camera.zoom.y = zoom
 
 # get tileset
 func get_tileset(tileset_name:String) -> Tileset:

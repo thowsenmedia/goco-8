@@ -82,6 +82,7 @@ func open_project(name:String):
 
 func save_project():
 	if project:
+		print("saving project...")
 		for window_name in windows:
 			var window = get_node(window_name)
 			if window.has_method("_before_save_project"):
@@ -103,6 +104,8 @@ func notify(text, time:float = 3):
 
 func run_project():
 	if project:
+		print("running project...")
+		
 		save_project()
 		ES.echo("Running project...")
 		ES.goto_scene("res://Runner/Runner.tscn", {

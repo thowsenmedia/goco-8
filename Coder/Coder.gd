@@ -24,6 +24,7 @@ func _draw():
 func _ready():
 	$Code/Sidebar/Tree.connect("request_open", self, "_on_request_open")
 	$Code/Sidebar/Tree.connect("item_renamed", self, "_on_tree_item_renamed")
+	$Code/Sidebar/Tree.connect("item_autoload_changed", self, "_on_item_autoload_changed")
 	
 	if testing:
 		var p = Project.new(testing_project_name)
@@ -41,7 +42,8 @@ func _open_project(project:Project):
 	if project.has_meta("editor_coder_tabs"):
 		var files = project.get_meta("editor_coder_tabs")
 		for file in files:
-			open_file(file)
+			if not is_file_open(file):
+				open_file(file)
 	
 	$Code/Sidebar/FileMenu/AddScriptButton.disabled = false
 
@@ -57,7 +59,8 @@ func _close_project():
 func _before_save_project(project:Project):
 	var tabs = []
 	for tab in $Code/EditorTabs.get_children():
-		tabs.append(tab.file)
+		if not tabs.has(tab.file):
+			tabs.append(tab.file)
 	
 	if tabs.size() > 0:
 		project.put_meta("editor_coder_tabs", tabs)
@@ -193,3 +196,19 @@ func _on_RemoveScriptButton_pressed():
 	if $Code/Sidebar/Tree.focused_item:
 		var item = $Code/Sidebar/Tree.focused_item
 		print("Deleting " + item.path)
+
+
+func _on_item_autoload_changed(item, file:String, autoload:bool):
+	file = file.trim_prefix(project.get_code_dir()).trim_prefix("/")
+	
+	if not project.has_meta("autoload"):
+		project.put_meta("autoload", [])
+	
+	var al:Array = project.get_meta("autoload")
+	
+	if autoload and not al.has(file):
+			al.append(file)
+	elif al.has(file):
+		al.remove(al.find(file))
+	
+	project.put_meta("autoload", al)

@@ -4,6 +4,9 @@ var project:Project
 
 var log_messages := ""
 
+# dictionary of ESNode2D-derived classes ready to instance
+var scripts := {}
+
 func _ready():
 	get_viewport().render_target_clear_mode = Viewport.CLEAR_MODE_NEVER
 	
@@ -20,7 +23,7 @@ func _ready():
 			instance.add_to_group("script")
 			instance._project = project
 			add_child(instance)
-		
+
 	elif ES.scene_arguments.has("project"):
 		ES.echo("Running project...")
 		
@@ -30,15 +33,27 @@ func _ready():
 		var scripts = project.get_scripts()
 		for script in scripts:
 			var clazz = ResourceLoader.load(project.get_code_dir() + "/" + script, "", true)
-			var instance = clazz.new()
-			instance.add_to_group("script")
-			instance._project = project
-			add_child(instance)
+			self.scripts[script] = clazz
 	
-	# start all scripts
-	for child in get_children():
-		if child.is_in_group("script") and child.has_method("_start"):
-			child._start()
+		# autoload certain scripts
+		if project.has_meta("autoload"):
+			for script_name in project.get_meta("autoload"):
+				print("autoloading " + script_name)
+				add_child(load_script(script_name))
+	
+#	# start all scripts
+#	for child in get_children():
+#		if child.is_in_group("script") and child.has_method("_start"):
+#			child._start()
+
+func load_script(script_name:String):
+	var instance = scripts[script_name].new()
+	instance.add_to_group("script")
+	
+	if instance is ESNode2D:
+		instance._project = project
+	
+	return instance
 
 
 func echo(what:String):

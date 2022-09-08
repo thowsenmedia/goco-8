@@ -1,10 +1,11 @@
-class_name CoderTreeItem extends Control
+class_name CoderTreeItem extends HBoxContainer
 
 signal focus_next()
 signal focus_previous()
 signal selected()
 signal file_renamed(old_path, new_path)
 signal edit_cancelled()
+signal autoload_changed(autoload)
 
 onready var button = $Button
 onready var lineEdit = $LineEdit
@@ -15,7 +16,8 @@ enum TYPE {
 }
 
 var type = TYPE.FILE
-var path:String = ""
+var autoload := false
+var path:String = "" setget _set_path, _get_path
 
 var time_last_click:int = 0
 
@@ -26,6 +28,14 @@ var is_editing:bool = false
 func _ready():
 	button.text = path
 	lineEdit.text = path
+
+	if path.ends_with('.gd'):
+		$Autoload.show()
+		$Autoload.pressed = autoload
+	else:
+		$Autoload.hide()
+	
+	$Autoload.connect("toggled", self, "_on_Autoload_toggled")
 	button.connect("button_down", self, "_on_button_down")
 	lineEdit.connect("gui_input", self, "_on_line_edit_input")
 	lineEdit.connect("focus_exited", self, "_on_line_edit_focus_exited")
@@ -61,11 +71,19 @@ func cancel_edit():
 	is_editing = false
 	
 
-func set_path(p):
+func _set_path(p):
 	path = p
-	button.text = Array(path.split("/")).pop_back()
-	lineEdit.text = path
-	
+	if button and lineEdit:
+		button.text = Array(path.split("/")).pop_back()
+		lineEdit.text = path
+		
+		if path.ends_with('.gd'):
+			$Autoload.show()
+		else:
+			$Autoload.hide()
+
+func _get_path() -> String:
+	return path
 
 func _on_text_entered(text):
 	if text == "":
@@ -94,3 +112,9 @@ func _on_button_down():
 	else:
 		emit_signal("selected")
 	time_last_click = OS.get_ticks_msec()
+
+
+func _on_Autoload_toggled(button_pressed):
+	print("autoload changed to " + str(button_pressed))
+	autoload = button_pressed
+	emit_signal("autoload_changed", autoload)

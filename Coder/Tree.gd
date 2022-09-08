@@ -2,6 +2,7 @@ class_name CoderTree extends VBoxContainer
 
 signal request_open(item, file)
 signal item_renamed(item, old_path, new_path)
+signal item_autoload_changed(item, file, autoload)
 
 const CoderTreeItemScene = preload("res://Coder/CoderTreeItem.tscn")
 
@@ -82,8 +83,17 @@ func create_item(type, path) -> CoderTreeItem:
 	var item = CoderTreeItemScene.instance()
 	item.type = type
 	item.path = path
+	
+	
+	if project and project.has_meta("autoload"):
+		var relPath = (get_current_dir() + "/" + path).trim_prefix(project.get_code_dir() + "/")
+		var al = project.get_meta("autoload")
+		if al.has(relPath):
+			item.autoload = true
+	
 	item.connect("selected", self, "_on_select_item", [item])
 	item.connect("file_renamed", self, "_on_rename_item", [item])
+	item.connect("autoload_changed", self, "_on_item_autoload_changed", [item])
 	
 	add_child(item)
 	return item
@@ -107,6 +117,15 @@ func _on_select_item(item:CoderTreeItem):
 		emit_signal("request_open", item, file)
 
 func _on_rename_item(old_path, new_path, item:CoderTreeItem):
+	# don't do anything if we're creating a new file
+	if old_path == "":
+		return
+	
 	var old_file = directory.get_current_dir() + "/" + old_path.trim_prefix("/")
 	var file = directory.get_current_dir() + "/" + new_path.trim_prefix("/")
 	emit_signal("item_renamed", item, old_file, file)
+
+
+func _on_item_autoload_changed(autoload, item:CoderTreeItem):
+	var file = directory.get_current_dir() + "/" + item.path.trim_prefix("/")
+	emit_signal("item_autoload_changed", item, file, autoload)

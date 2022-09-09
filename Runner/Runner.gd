@@ -16,12 +16,8 @@ func _ready():
 	
 	if ES.scene_arguments.has("packed_project"):
 		ES.echo("Running packed project...")
-		var packed_project = ES.scene_arguments["packed_project"]
-		project = Project.new(packed_project.name)
-		project.unpack(packed_project)
+		project = ES.scene_arguments["packed_project"]
 	elif ES.scene_arguments.has("project"):
-		ES.echo("Running project...")
-		
 		var project_name = ES.scene_arguments["project"]
 		project = Project.new(project_name)
 		project.load_data()

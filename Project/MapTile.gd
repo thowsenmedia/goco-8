@@ -12,7 +12,28 @@ func set_tile(ts:Tileset, id:int = -1):
 func is_empty() -> bool:
 	return tile_id == -1
 
-func serialize() -> Dictionary:
+func pack(project) -> Dictionary:
+	var packed = {
+		"tileset": null,
+		"tile_id": tile_id,
+		"region": region
+	}
+	
+	if tileset:
+		packed.tileset = tileset.title
+	
+	return packed
+
+
+func unpack(project, data: Dictionary):
+	if data.tileset != null:
+		tileset = project.tilesets[data.tileset]
+	
+	tile_id = data.tile_id
+	region = data.region
+
+
+func serialize(project) -> Dictionary:
 	var data = {
 		"tileset": "",
 		"tile_id": tile_id
@@ -23,7 +44,7 @@ func serialize() -> Dictionary:
 	
 	return data
 
-func unserialize(data:Dictionary, project):
+func unserialize(project, data:Dictionary):
 	tile_id = data.tile_id
 	
 	if data.tileset != "":

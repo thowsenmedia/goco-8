@@ -47,8 +47,9 @@ func save_file():
 	return true
 
 
-func pack() -> Dictionary:
+func pack(project) -> Dictionary:
 	var packed = {
+		"path": path.trim_prefix(project.get_tilesets_dir() + "/"),
 		"title": title,
 		"filename": filename,
 		"tile_size": tile_size,
@@ -60,7 +61,8 @@ func pack() -> Dictionary:
 	return packed
 
 
-func unpack(packed: Dictionary):
+func unpack(project, packed: Dictionary):
+	self.path = project.get_tilesets_dir("/" + packed.path)
 	title = packed.title
 	filename = packed.filename
 	tile_size = packed.tile_size
@@ -72,9 +74,9 @@ func unpack(packed: Dictionary):
 	texture.create_from_image(image, 0)
 
 
-func serialize() -> Dictionary:
+func serialize(project) -> Dictionary:
 	return {
-		"path": path,
+		"path": path.trim_prefix(project.get_tilesets_dir() + "/"),
 		"title": title,
 		"filename": filename,
 		"tile_size": tile_size,
@@ -82,8 +84,8 @@ func serialize() -> Dictionary:
 	}
 
 
-func unserialize(data:Dictionary):
-	self.path = data.path
+func unserialize(project, data:Dictionary):
+	self.path = project.get_tilesets_dir("/" + data.path)
 	filename = data.filename
 	tile_size = data.tile_size
 	tile_meta = data.tile_meta

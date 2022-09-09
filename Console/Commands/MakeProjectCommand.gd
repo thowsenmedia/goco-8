@@ -14,12 +14,13 @@ func run(args:Array = []):
 			ES.echo("Failed to make user://projects dir. Error:" + str(err))
 			return COMMAND_ERROR
 	
-	var err = dir.make_dir("projects/" + args[0])
-	if err != OK:
-		ES.echo("Failed to make directory " + str(args[0]) + ". Err: " + str(err))
-		return COMMAND_ERROR
+	if not dir.dir_exists("projects/" + args[0]):
+		var err = dir.make_dir("projects/" + args[0])
+		if err != OK:
+			ES.echo("Failed to make directory " + str(args[0]) + ". Err: " + str(err))
+			return COMMAND_ERROR
 	
-	err = dir.open("user://projects/" + args[0])
+	var err = dir.open("user://projects/" + args[0])
 	if err:
 		ES.echo("Failed to open " + "projects/" + args[0] + ". Err: " + str(err))
 	else:

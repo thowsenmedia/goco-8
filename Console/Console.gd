@@ -14,10 +14,10 @@ onready var gocoNet = $GocoNet
 
 var commands := {}
 var welcome_message = """[center]
-[color=purple]/    G O C O - 8    \\[/color]
+[color=purple]|    G O C O - 8    |[/color]
 
 [color=gray]Copyright (c) 2022 - Thowsen Media
-Version: 0.7.1[/color]
+Version: 0.9.0[/color]
 [color=teal]goco8.thowsenmedia.com[/color]
 [color=gray]--------------------------------------------------[/color]
 [/center]
@@ -39,6 +39,7 @@ func _init():
 func _ready():
 	add_command("help", HelpCommand.new())
 	add_command("quickstart", QuickStartCommand.new())
+	add_command("install_demos", InstallDemosCommand.new())
 	add_command("cd", ChangeDirCommand.new())
 	add_command("ls", ListFilesCommand.new())
 	add_command("cls", ClearScreenCommand.new())

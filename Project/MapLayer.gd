@@ -14,6 +14,32 @@ func _init(_name:String = "", tileSize:int = 0, layer_size:Vector2 = Vector2()):
 	# initialize tiles
 	_init_tiles()
 
+func pack(project) -> Dictionary:
+	var packed = {
+		"name": name,
+		"tile_size": tile_size,
+		"size": size,
+		"tiles": []
+	}
+	
+	for tile in tiles:
+		packed.tiles.append(tile.pack(project))
+	
+	return packed
+
+
+func unpack(project, data:Dictionary):
+	name = data.name
+	tile_size = data.tile_size
+	size = data.size
+	
+	tiles = []
+	
+	for tile_data in data.tiles:
+		var tile = MapTile.new()
+		tile.unpack(project, tile_data)
+		tiles.append(tile)
+
 
 func _init_tiles():
 	tiles.resize(size.x * size.y * tile_size)
@@ -21,7 +47,7 @@ func _init_tiles():
 		tiles[i] = MapTile.new()
 
 
-func serialize() -> Dictionary:
+func serialize(project) -> Dictionary:
 	var data = {
 		"name": name,
 		"tile_size": var2str(tile_size),
@@ -30,12 +56,12 @@ func serialize() -> Dictionary:
 	}
 	
 	for tile in tiles:
-		data["tiles"].append(tile.serialize())
+		data["tiles"].append(tile.serialize(project))
 	
 	return data
 
 
-func unserialize(data:Dictionary, project):
+func unserialize(project, data:Dictionary):
 	name = data.name
 	tile_size = int(data.tile_size)
 	size = str2var(data.size)
@@ -45,7 +71,7 @@ func unserialize(data:Dictionary, project):
 	
 	var i = 0
 	for tile in tiles:
-		tile.unserialize(data.tiles[i], project)
+		tile.unserialize(project, data.tiles[i])
 		i += 1
 
 

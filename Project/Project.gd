@@ -11,7 +11,6 @@ var scripts := {}
 var maps := {}
 var meta := {}
 
-var is_json:bool = false
 var is_loaded:bool = false
 var is_loaded_from_packed_file := false
 
@@ -35,38 +34,30 @@ func put_meta(key, value):
 	meta[key] = value
 
 
-func get_project_file(json:bool = false) -> String:
-	if is_json or json:
-		return path + "/" + name + ".json"
-	else:
-		return path + "/" + name + ".project"
+func get_project_file() -> String:
+	return path + "/project.json"
 
 
-func get_code_dir() -> String:
-	return path + "/code"
+func get_code_dir(f = "") -> String:
+	return path + "/code" + f
 
-func get_tilesets_dir() -> String:
-	return path + "/tilesets"
+func get_tilesets_dir(f = "") -> String:
+	return path + "/tilesets" + f
 
-func get_music_dir() -> String:
-	return path + "/music"
+func get_music_dir(f = "") -> String:
+	return path + "/music" + f
 
-func get_sfx_dir() -> String:
-	return path + "/sfx"
+func get_sfx_dir(f = "") -> String:
+	return path + "/sfx" + f
 
 func load_data() -> bool:
 	var f := File.new()
-	var project_file = get_project_file(false)
-	is_json = false
+	var project_file = get_project_file()
 	
 	# get project file
 	if not f.file_exists(project_file):
-		project_file = get_project_file(true)
-		is_json = true
-		
-		if not f.file_exists(project_file):
-			ES.error("Project file does not exist.")
-			return false
+		ES.echo("Project file does not exist. Assuming it's a new project.")
+		return false
 	
 	# open it
 	var err = f.open(project_file, File.READ)
@@ -77,14 +68,11 @@ func load_data() -> bool:
 		# get data and parse it
 		var data
 		
-		if is_json:
-			var json := JSON.parse(f.get_as_text())
-			if json.error:
-				ES.error("Failed to parse JSON file " + project_file + ". Err: " + str(err))
-				return false
-			data = json.result
-		else:
-			data = f.get_var(true)
+		var json := JSON.parse(f.get_as_text())
+		if json.error:
+			ES.error("Failed to parse JSON file " + project_file + ". Err: " + str(err))
+			return false
+		data = json.result
 		
 		# finally, unserialize
 		unserialize(data)
@@ -111,7 +99,7 @@ func create_map(name:String, width: int, height: int, tilesize: int):
 func get_map(name:String) -> Map:
 	return maps[name]
 
-func save_data():
+func save_data(save_scripts:bool = false):
 	var f = File.new()
 	var project_file = get_project_file()
 	var err = f.open(project_file, File.WRITE)
@@ -122,29 +110,15 @@ func save_data():
 	version += 1
 	
 	save_tilesets()
+	
+	if save_scripts:
+		save_scripts()
 	
 	var json = JSON.print(serialize(), "\t")
 	
 	f.store_string(json)
 	f.close()
 	ES.echo("Project data saved to " + project_file)
-	return true
-
-func _old_save_data():
-	var f = File.new()
-	var project_file = get_project_file()
-	var err = f.open(project_file, File.WRITE)
-	if err:
-		ES.echo("Failed to open project_file for saving. Err: " + str(err))
-		return false
-	
-	version += 1
-	
-	save_tilesets()
-	
-	f.store_var(serialize(), true)
-	f.close()
-	ES.echo("Project data saved.")
 	return true
 
 
@@ -179,7 +153,6 @@ func get_scripts() -> Array:
 				if script_file.ends_with(".gd"):
 					scripts.append(script_file)
 			script_file = dir.get_next()
-		
 		dir.list_dir_end()
 	else:
 		ES.echo("Failed to open code directory " + get_code_dir() + ". Err: " + str(err))
@@ -208,21 +181,37 @@ func save_tilesets():
 	for tileset in tilesets.values():
 		tileset.save_file()
 
+func save_scripts():
+	for name in scripts.keys():
+		var script:GDScript = scripts[name]
+		var f = File.new()
+		var err = f.open(get_code_dir(name), File.WRITE)
+		if err:
+			ES.error("Failed to open " + get_code_dir(name) + " for writing.")
+		else:
+			
+			f.store_string(script.source_code)
+			f.close()
+
 
 func pack():
 	var packed = {
 		"name": name,
 		"tilesets": {},
-		"maps": {},
+		"maps": maps,
 		"scripts": {},
 		"meta": meta,
 		"version": version,
 		"title": title,
 	}
 	
+	# maps
+	for map in maps.values():
+		packed["maps"][map.name] = map.pack(self)
+	
 	# tilesets
 	for tileset in tilesets.values():
-		packed["tilesets"][tileset.title] = tileset.pack()
+		packed["tilesets"][tileset.title] = tileset.pack(self)
 	
 	# scripts
 	var scripts = get_scripts()
@@ -237,14 +226,21 @@ func unpack(packed:Dictionary):
 	meta = packed.meta
 	version = packed.version
 	title = packed.title
-	tilesets = {}
+	tilesets = packed.tilesets
+	maps = {}
 	scripts = {}
 	
 	# tilesets
 	for tileset_data in packed.tilesets.values():
 		var tileset = Tileset.new()
-		tileset.unpack(tileset_data)
+		tileset.unpack(self, tileset_data)
 		tilesets[tileset_data.title] = tileset
+	
+	# maps
+	for map_data in packed.maps.values():
+		var map = Map.new()
+		map.unpack(self, map_data)
+		maps[map.name] = map
 	
 	# scripts
 	var script_keys = packed.scripts.keys()
@@ -267,10 +263,10 @@ func serialize():
 	}
 	
 	for tileset in tilesets.values():
-		data["tilesets"][tileset.title] = tileset.serialize()
+		data["tilesets"][tileset.title] = tileset.serialize(self)
 	
 	for map in maps.values():
-		data["maps"][map.name] = map.serialize()
+		data["maps"][map.name] = map.serialize(self)
 	
 	return data
 
@@ -282,7 +278,7 @@ func unserialize(data:Dictionary):
 	# tilesets
 	for tileset_data in data.tilesets.values():
 		var tileset = Tileset.new()
-		tileset.unserialize(tileset_data)
+		tileset.unserialize(self, tileset_data)
 		tilesets[tileset.title] = tileset
 	
 	if data.has("version"):
@@ -295,5 +291,5 @@ func unserialize(data:Dictionary):
 	if data.has("maps"):
 		for map_data in data.maps.values():
 			var map = Map.new()
-			map.unserialize(map_data, self)
+			map.unserialize(self, map_data)
 			maps[map.name] = map

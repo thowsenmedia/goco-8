@@ -21,7 +21,35 @@ func is_grid_pos_in_bounds(x: int, y: int):
 	return true
 
 
-func serialize() -> Dictionary:
+func pack(project) -> Dictionary:
+	var packed = {
+		"name": name,
+		"layers": [],
+		"size": size,
+		"tile_size": tile_size
+	}
+	
+	var i = 0
+	for layer in layers:
+		packed.layers.append(layer.pack(project))
+		i += 1
+	
+	return packed
+
+
+func unpack(project, packed:Dictionary):
+	name = packed.name
+	size = packed.size
+	tile_size = packed.tile_size
+	layers = []
+	
+	for layer_data in packed.layers:
+		var layer = MapLayer.new()
+		layer.unpack(project, layer_data)
+		layers.append(layer)
+
+
+func serialize(project) -> Dictionary:
 	var data = {
 		"name": name,
 		"layers": [],
@@ -30,12 +58,12 @@ func serialize() -> Dictionary:
 	}
 	
 	for layer in layers:
-		data["layers"].append(layer.serialize())
+		data["layers"].append(layer.serialize(project))
 	
 	return data
 
 
-func unserialize(data:Dictionary, project):
+func unserialize(project, data:Dictionary):
 	name = data.name
 	size = str2var(data.size)
 	tile_size = int(data.tile_size)
@@ -43,7 +71,7 @@ func unserialize(data:Dictionary, project):
 	layers = []
 	for layer_data in data.layers:
 		var layer = MapLayer.new()
-		layer.unserialize(layer_data, project)
+		layer.unserialize(project, layer_data)
 		layers.append(layer)
 
 

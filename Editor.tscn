@@ -63,9 +63,9 @@ one_shot = true
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Notification"]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_top = 300.0
+margin_top = 60.0
 margin_right = 320.0
-margin_bottom = 324.0
+margin_bottom = 84.0
 mouse_filter = 2
 size_flags_horizontal = 3
 alignment = 2

@@ -189,50 +189,130 @@ focus_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 bbcode_enabled = true
-bbcode_text = "[center]FUNCTIONS[/center]
+bbcode_text = "[color=yellow][center]---- FUNCTIONS ----[/center][/color]
 
-[color=gray]btn(action:String, player_id:int = 0)[/color]
-	returns a ButtonState object, containing three boolean properties: down, pressed and released.
-	
-[color=gray] btn_[action](player_id:int = 0)[/color]
-	Shorthand for the btn() function. For example, btn_a(2) returns the state of the A button for player #2.
-	
-[color=gray] get_camera()[/color]
-	returns the main camera
+echo(message:String):
+	Print to the console
 
-[color=gray] get_tileset(name:String)[/color]
-	returns a given Tileset.
+script(script_name):
+	get a script instance, for example:
+	var player = script(\"player.gd\")
+	add_child(player)
 	
-[color=gray] get_map(name:String[/color]
-	returns a given map
-
-[color=gray] draw_map(name:String, pos_x: int, pos_y: int)[/color]
-	draw the given map from the top left corner,starting at the given position.
-	
-[color=gray] draw_sprite(tileset:String, tile:int, x:int, y:int, w:int, h:int[/color]
-	draw a single tile/sprite from the given tileset at x and y position. w and h (width & height) are optional arguments."
-text = "FUNCTIONS
+	To add the script to the scene and start it.
 
 btn(action:String, player_id:int = 0)
-	returns a ButtonState object, containing three boolean properties: down, pressed and released.
-	
- btn_[action](player_id:int = 0)
-	Shorthand for the btn() function. For example, btn_a(2) returns the state of the A button for player #2.
-	
- get_camera()
-	returns the main camera
+	returns a ButtonState object for the given input action and player_id
 
- get_tileset(name:String)
-	returns a given Tileset.
-	
- get_map(name:String
-	returns a given map
+btn_[x](player_id:int = 0)
+	alternative for btn(). For example: btn_a(1) returns info about the A button for player #2
 
- draw_map(name:String, pos_x: int, pos_y: int)
-	draw the given map from the top left corner,starting at the given position.
+camera(x:float, y:float, zoom:float = null)
+	set the camera position (and optionally the zoom value).
+
+get_camera()
+	returns the camera
 	
- draw_sprite(tileset:String, tile:int, x:int, y:int, w:int, h:int
-	draw a single tile/sprite from the given tileset at x and y position. w and h (width & height) are optional arguments."
+get_map(name:String):
+	get a Map instance by name
+
+func get_tile(map_name:String, layer_name_or_id, x:int, y:int):
+	get the MapTile instance from the given map, layer and grid position.
+	
+func get_tile_rect_at(map_name: String, world_x: float, world_y:float):
+	get a Rect2 object containing the position and size (both Vector2) for the tile at the given world position.
+	This world position is turned into a grid position by dividing the numbers by the tilesize of the given map.
+
+[color=yellow][center]---- DRAW FUNCTIONS ----[/center][/color]
+
+func draw_text(text:String, pos_x: int, pos_y: int, color:Color = Color.white)
+	Draw a string at the given position
+
+func text_width(text) -> int:
+	returns how wide the given text would be when drawn
+
+func text_height(text:String) -> int:
+	returns how tall the given text would be when drawn
+
+func draw_map(map_name, x, y)
+	draw a map
+
+func draw_sprite(tileset_name, tile_index, x, y, width?, height?)
+	draw a single tile from a tileset. width and height are optional arguments.
+
+func brect(x, y, w, h, color:Color, width = 1)
+	draw the border of a rectangle
+
+func frect(x, y, w, h, color:Color)
+	draw a filled rectangle
+
+func line(x, y, to_x, to_y, width = 1, color = Color.white)
+	draw a line
+
+func cls()
+	clear the screen"
+text = "---- FUNCTIONS ----
+
+echo(message:String):
+	Print to the console
+
+script(script_name):
+	get a script instance, for example:
+	var player = script(\"player.gd\")
+	add_child(player)
+	
+	To add the script to the scene and start it.
+
+btn(action:String, player_id:int = 0)
+	returns a ButtonState object for the given input action and player_id
+
+btn_[x](player_id:int = 0)
+	alternative for btn(). For example: btn_a(1) returns info about the A button for player #2
+
+camera(x:float, y:float, zoom:float = null)
+	set the camera position (and optionally the zoom value).
+
+get_camera()
+	returns the camera
+	
+get_map(name:String):
+	get a Map instance by name
+
+func get_tile(map_name:String, layer_name_or_id, x:int, y:int):
+	get the MapTile instance from the given map, layer and grid position.
+	
+func get_tile_rect_at(map_name: String, world_x: float, world_y:float):
+	get a Rect2 object containing the position and size (both Vector2) for the tile at the given world position.
+	This world position is turned into a grid position by dividing the numbers by the tilesize of the given map.
+
+---- DRAW FUNCTIONS ----
+
+func draw_text(text:String, pos_x: int, pos_y: int, color:Color = Color.white)
+	Draw a string at the given position
+
+func text_width(text) -> int:
+	returns how wide the given text would be when drawn
+
+func text_height(text:String) -> int:
+	returns how tall the given text would be when drawn
+
+func draw_map(map_name, x, y)
+	draw a map
+
+func draw_sprite(tileset_name, tile_index, x, y, width?, height?)
+	draw a single tile from a tileset. width and height are optional arguments.
+
+func brect(x, y, w, h, color:Color, width = 1)
+	draw the border of a rectangle
+
+func frect(x, y, w, h, color:Color)
+	draw a filled rectangle
+
+func line(x, y, to_x, to_y, width = 1, color = Color.white)
+	draw a line
+
+func cls()
+	clear the screen"
 selection_enabled = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="HelpPanel"]

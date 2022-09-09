@@ -1,6 +1,6 @@
 extends Node
 
-const VERSION := "0.5.1"
+const VERSION := "0.9.0"
 
 enum COLORS {
 	

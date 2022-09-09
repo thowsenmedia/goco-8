@@ -39,19 +39,31 @@ func pack(project:Project):
 		ES.echo("Project packed to " + file + ".")
 
 
-func unpack(game_file: String):
+func unpack_and_save(game_file: String, project_name:String = "") -> Project:
 	var f = File.new()
 	
 	if not f.file_exists(game_file):
 		ES.error("Game file not found: " + game_file)
-		return
+		return null
 	
 	var err = f.open(game_file, File.READ)
 	if err:
 		ES.error("Failed to open game_file at " + str(game_file) + ". Err: " + str(err))
-		return
+		return null
 	
 	var packed_project = f.get_var(true)
 	
 	f.close()
-	return packed_project
+	
+	# why wasnt this being done already?
+	if project_name == "":
+		project_name = packed_project.name
+	
+	var project = Project.new(project_name)
+	project.unpack(packed_project)
+	project.save_data(true)
+	
+	for scripts in packed_project.scripts:
+		print("Saving script file")
+	
+	return project

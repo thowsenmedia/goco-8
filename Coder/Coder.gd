@@ -52,7 +52,9 @@ func _open_project(project:Project):
 	if project.has_meta("editor_coder_current_line"):
 		var line = project.get_meta("editor_coder_current_line")
 		var editor:TextEdit = $Code/EditorTabs.get_current_tab_control()
-		editor.cursor_set_line(line)
+		# silently fail this
+		if editor:
+			editor.cursor_set_line(line)
 	
 	$Code/Sidebar/FileMenu/AddScriptButton.disabled = false
 

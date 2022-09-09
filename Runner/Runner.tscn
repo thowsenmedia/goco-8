@@ -12,8 +12,11 @@ anti_aliasing = false
 script = ExtResource( 1 )
 
 [node name="Camera" type="Camera2D" parent="."]
-anchor_mode = 0
+position = Vector2( 160, 120 )
 current = true
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

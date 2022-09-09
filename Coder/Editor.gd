@@ -10,9 +10,9 @@ const COLORS = {
 }
 
 const KEYWORDS = [
-	'var', 'func','return','void','break','continue',
+	'var', 'self', 'func','return','void','break','continue',
 	'class','class_name','extends',
-	'if','elif','else','for','while','yield','enum'
+	'if','elif','else','for','while','yield','enum', 'match'
 ]
 
 const CONSTANTS = [
@@ -24,6 +24,13 @@ func _ready():
 	
 	for kw in KEYWORDS:
 		add_keyword_color(kw, COLORS.Keyword)
+	
+	connect("text_changed", self, "_on_text_changed")
+
+
+func _on_text_changed():
+	dirty = true
+
 
 func save():
 	var f = File.new()
@@ -32,5 +39,6 @@ func save():
 		f.store_string(text)
 		f.close()
 		dirty = false
+		ES.echo("Saved " + file)
 	else:
 		ES.echo("Failed to save " + file + ". Err: " + str(err))

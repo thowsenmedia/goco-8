@@ -42,8 +42,8 @@ custom_constants/margin_bottom = 4
 [node name="EscapeMenu" type="VBoxContainer" parent="CanvasLayer/EscapeMenu/PanelContainer/MarginContainer"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 59.0
-margin_bottom = 42.0
+margin_right = 67.0
+margin_bottom = 46.0
 
 [node name="Resume" type="Button" parent="CanvasLayer/EscapeMenu/PanelContainer/MarginContainer/EscapeMenu"]
 margin_right = 55.0
@@ -56,5 +56,5 @@ margin_right = 55.0
 margin_bottom = 38.0
 text = "Quit Game"
 
-[connection signal="pressed" from="CanvasLayer/EscapeMenu/PanelContainer/MarginContainer/EscapeMenu/Resume" to="CanvasLayer/EscapeMenu" method="hide"]
+[connection signal="pressed" from="CanvasLayer/EscapeMenu/PanelContainer/MarginContainer/EscapeMenu/Resume" to="." method="resume"]
 [connection signal="pressed" from="CanvasLayer/EscapeMenu/PanelContainer/MarginContainer/EscapeMenu/Quit" to="." method="quit"]

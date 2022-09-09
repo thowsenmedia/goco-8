@@ -105,10 +105,19 @@ func get_tileset(tileset_name:String) -> Tileset:
 
 # get map
 func get_map(map_name:String) -> Map:
+	if not _project.maps.has(map_name):
+		ES.error("unknown map " + map_name)
+		return null
 	return _project.maps[map_name]
 
 func get_tile(map_name:String, layer_name_or_id, x:int, y:int) -> MapTile:
 	return _project.maps[map_name].get_layer(layer_name_or_id).get_tile_v(x, y)
+
+func get_tile_rect_at(map_name: String, world_x:float, world_y:float) -> Rect2:
+	var map = get_map(map_name)
+	var x = floor(world_x / map.tile_size)
+	var y = floor(world_y / map.tile_size)
+	return Rect2(x, y, map.tile_size, map.tile_size)
 
 func text_width(text: String) -> float:
 	return _FONT_DEFAULT.get_string_size(text).x
@@ -122,6 +131,10 @@ func draw_text(text: String, pos_x: int, pos_y: int, color:Color = Color.white):
 
 func draw_map(map_name:String, pos_x:int, pos_y:int):
 	var map = get_map(map_name)
+	if not map:
+		ES.error("Unknown map " + map_name)
+		return
+	
 	for layer in map.layers:
 		for x in map.size.x:
 			for y in map.size.y:

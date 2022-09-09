@@ -11,6 +11,7 @@ var scripts := {}
 var maps := {}
 var meta := {}
 
+var is_json:bool = false
 var is_loaded:bool = false
 var is_loaded_from_packed_file := false
 
@@ -34,8 +35,12 @@ func put_meta(key, value):
 	meta[key] = value
 
 
-func get_project_file() -> String:
-	return path + "/" + name + ".project"
+func get_project_file(json:bool = false) -> String:
+	if is_json or json:
+		return path + "/" + name + ".json"
+	else:
+		return path + "/" + name + ".project"
+
 
 func get_code_dir() -> String:
 	return path + "/code"
@@ -50,17 +55,41 @@ func get_sfx_dir() -> String:
 	return path + "/sfx"
 
 func load_data() -> bool:
-	var f = File.new()
-	var project_file = get_project_file()
-	if f.file_exists(project_file):
-		var err = f.open(project_file, File.READ)
-		if err:
-			ES.echo("Failed to open project file " + project_file + ". Err: " + str(err))
+	var f := File.new()
+	var project_file = get_project_file(false)
+	is_json = false
+	
+	# get project file
+	if not f.file_exists(project_file):
+		project_file = get_project_file(true)
+		is_json = true
+		
+		if not f.file_exists(project_file):
+			ES.error("Project file does not exist.")
 			return false
+	
+	# open it
+	var err = f.open(project_file, File.READ)
+	if err:
+		ES.echo("Failed to open project file " + project_file + ". Err: " + str(err))
+		return false
+	else:
+		# get data and parse it
+		var data
+		
+		if is_json:
+			var json := JSON.parse(f.get_as_text())
+			if json.error:
+				ES.error("Failed to parse JSON file " + project_file + ". Err: " + str(err))
+				return false
+			data = json.result
 		else:
-			var data = f.get_var(true)
-			unserialize(data)
-			f.close()
+			data = f.get_var(true)
+		
+		# finally, unserialize
+		unserialize(data)
+		f.close()
+	
 	is_loaded = true
 	return true
 
@@ -82,8 +111,26 @@ func create_map(name:String, width: int, height: int, tilesize: int):
 func get_map(name:String) -> Map:
 	return maps[name]
 
-
 func save_data():
+	var f = File.new()
+	var project_file = get_project_file()
+	var err = f.open(project_file, File.WRITE)
+	if err:
+		ES.echo("Failed to open project_file for saving. Err: " + str(err))
+		return false
+	
+	version += 1
+	
+	save_tilesets()
+	
+	var json = JSON.print(serialize(), "\t")
+	
+	f.store_string(json)
+	f.close()
+	ES.echo("Project data saved to " + project_file)
+	return true
+
+func _old_save_data():
 	var f = File.new()
 	var project_file = get_project_file()
 	var err = f.open(project_file, File.WRITE)

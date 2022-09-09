@@ -25,8 +25,8 @@ func serialize() -> Dictionary:
 	var data = {
 		"name": name,
 		"layers": [],
-		"size": size,
-		"tile_size": tile_size
+		"size": var2str(size),
+		"tile_size": var2str(tile_size)
 	}
 	
 	for layer in layers:
@@ -37,8 +37,8 @@ func serialize() -> Dictionary:
 
 func unserialize(data:Dictionary, project):
 	name = data.name
-	size = data.size
-	tile_size = data.tile_size
+	size = str2var(data.size)
+	tile_size = int(data.tile_size)
 	
 	layers = []
 	for layer_data in data.layers:
@@ -54,6 +54,9 @@ func layer_name_exists(name:String) -> bool:
 	
 	return false
 
+func get_tile(layer_name_or_id, x:int, y:int):
+	var layer = get_layer(layer_name_or_id)
+	return layer.get_tile_g(x, y)
 
 func get_layer(name_or_id):
 	if name_or_id is String:

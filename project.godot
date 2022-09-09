@@ -426,7 +426,6 @@ ES="*res://ES.gd"
 [debug]
 
 gdscript/warnings/unused_variable=false
-gdscript/warnings/shadowed_variable=false
 
 [display]
 
@@ -440,7 +439,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/color-palette/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/godot_sfxr/plugin.cfg" )
 
 [gui]
 

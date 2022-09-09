@@ -14,8 +14,8 @@ signal upload_failed(result, response_code, headers, body)
 signal download_success(response_code, message)
 signal download_failed(result, response_code, headers, body)
 
-const ADDRESS := "http://goco-8.local/api"
-const VERIFY_SSL := false
+const ADDRESS := "https://goco8.thowsenmedia.com/api"
+const VERIFY_SSL := true
 
 var logged_in := false
 var credentials := {

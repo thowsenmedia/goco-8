@@ -24,8 +24,8 @@ func _init_tiles():
 func serialize() -> Dictionary:
 	var data = {
 		"name": name,
-		"tile_size": tile_size,
-		"size": size,
+		"tile_size": var2str(tile_size),
+		"size": var2str(size),
 		"tiles": []
 	}
 	
@@ -37,8 +37,8 @@ func serialize() -> Dictionary:
 
 func unserialize(data:Dictionary, project):
 	name = data.name
-	tile_size = data.tile_size
-	size = data.size
+	tile_size = int(data.tile_size)
+	size = str2var(data.size)
 	
 	# initialize tiles
 	_init_tiles()

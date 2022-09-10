@@ -14,12 +14,12 @@ onready var gocoNet = $GocoNet
 
 var commands := {}
 var welcome_message = """[center]
-[color=purple]|    G O C O - 8    |[/color]
+[rainbow][b]    G O C O - 8    [/b][/rainbow]
+[color=gray]Version: 0.10.0[/color]
 
-[color=gray]Copyright (c) 2022 - Thowsen Media
-Version: 0.9.0[/color]
+[color=gray][i]Copyright (c) 2022 - Thowsen Media[/i][/color]
 [color=teal]goco8.thowsenmedia.com[/color]
-[color=gray]--------------------------------------------------[/color]
+[color=gray]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[/color]
 [/center]
 
 Type [color=yellow]help[/color] for a list of commands, or [color=yellow]quickstart[/color] for a quick introduction.

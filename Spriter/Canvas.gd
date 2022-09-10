@@ -180,6 +180,16 @@ func apply_tool(event:InputEventMouse):
 			update()
 			get_tree().set_input_as_handled()
 
+func is_equal_approximate(a:Color, b:Color):
+	if round(a.r*100) != round(b.r*100):
+		return false
+	if round(a.g*100) != round(b.g*100):
+		return false
+	if round(a.b*100) != round(b.b*100):
+			return false
+	if round(a.a*100) != round(b.a*100):
+			return false
+	return true
 
 func fill():
 	print("filling")
@@ -190,6 +200,9 @@ func fill():
 	
 	var start_color = image.get_pixel(start.x, start.y)
 	
+	if is_equal_approximate(start_color, selected_color):
+		return
+	
 	var queue = []
 	queue.append(start)
 	while not queue.empty():
@@ -199,7 +212,8 @@ func fill():
 			
 			for pixel in pixel_get_neighbours(n):
 				queue.append(pixel)
-	emit_signal("image_changed")
+	update_image_texture()
+	update()
 
 
 func pixel_get_neighbours(pixel:Vector2) -> Array:

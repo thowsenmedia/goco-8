@@ -44,11 +44,13 @@ anchor_bottom = 1.0
 custom_constants/separation = 0
 
 [node name="TopBar" type="PanelContainer" parent="VBoxContainer"]
+visible = false
 margin_right = 320.0
 margin_bottom = 14.0
 size_flags_horizontal = 3
 
 [node name="HBox" type="HBoxContainer" parent="VBoxContainer/TopBar"]
+visible = false
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 313.0
@@ -61,7 +63,6 @@ margin_bottom = 13.0
 text = ":/Spriter"
 
 [node name="Main" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 14.0
 margin_right = 320.0
 margin_bottom = 157.0
 size_flags_horizontal = 3
@@ -71,7 +72,7 @@ custom_constants/separation = 0
 
 [node name="Painter" type="Control" parent="VBoxContainer/Main"]
 margin_right = 272.0
-margin_bottom = 143.0
+margin_bottom = 157.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 5 )
@@ -83,7 +84,7 @@ custom_constants/separation = 0
 
 [node name="Canvas" type="Control" parent="VBoxContainer/Main/Painter/VBoxContainer"]
 margin_right = 272.0
-margin_bottom = 143.0
+margin_bottom = 157.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 3 )
@@ -107,7 +108,7 @@ text = "#0"
 [node name="Tools" type="VBoxContainer" parent="VBoxContainer/Main"]
 margin_left = 272.0
 margin_right = 320.0
-margin_bottom = 143.0
+margin_bottom = 157.0
 custom_constants/separation = 0
 
 [node name="PaletteSelector" type="Control" parent="VBoxContainer/Main/Tools"]
@@ -123,14 +124,15 @@ rows = 8
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer/Main/Tools"]
 margin_top = 96.0
 margin_right = 48.0
-margin_bottom = 115.0
+margin_bottom = 120.0
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
 columns = 2
 
 [node name="Paint" type="Button" parent="VBoxContainer/Main/Tools/GridContainer"]
-margin_right = 20.0
-margin_bottom = 19.0
+margin_right = 24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
 toggle_mode = true
 pressed = true
 group = SubResource( 3 )
@@ -138,9 +140,10 @@ icon = SubResource( 5 )
 icon_align = 1
 
 [node name="Fill" type="Button" parent="VBoxContainer/Main/Tools/GridContainer"]
-margin_left = 20.0
-margin_right = 40.0
-margin_bottom = 19.0
+margin_left = 24.0
+margin_right = 48.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
 toggle_mode = true
 group = SubResource( 3 )
 icon = SubResource( 4 )

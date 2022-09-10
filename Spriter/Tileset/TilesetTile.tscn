@@ -8,4 +8,5 @@ anchor_bottom = 1.0
 margin_right = -80.0
 margin_bottom = -176.0
 rect_min_size = Vector2( 20, 20 )
+focus_mode = 2
 script = ExtResource( 1 )

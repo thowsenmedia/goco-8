@@ -17,6 +17,7 @@ func _ready():
 	addTilesetButton.connect("pressed", newTilesetPopup, "popup_centered")
 	newTilesetPopup.connect("request_add", self, "add_tileset")
 	tilesetControl.connect("tile_selected", self, "_on_tile_selected")
+	tilesetControl.connect("tile_changed", self, "_on_tile_changed")
 	canvas.connect("image_changed", self, "_on_canvas_image_changed")
 	tilesetSelector.connect("tileset_selected", self, "_show_tileset")
 	
@@ -51,11 +52,6 @@ func _open_project(p:Project):
 		tilesetSelector.select_tileset(tileset)
 		_show_tileset(tileset)
 
-func _input(event):
-	if event.is_action("save") and event.pressed:
-		ES.echo("Saving project...")
-		project.save_data()
-
 
 func _show_tileset(tileset:Tileset):
 	print("Showing tileset " + tileset.title)
@@ -67,6 +63,10 @@ func _show_tileset(tileset:Tileset):
 func _on_tile_selected(tile):
 	canvas.set_image_region(tilesetControl.get_selected_region())
 	$VBoxContainer/Main/Painter/TileID.text = "#" + str(tile)
+
+func _on_tile_changed(tile:TilesetTile):
+	canvas.update_image_texture()
+	canvas.update()
 
 func _on_canvas_image_changed():
 	tilesetControl.update_texture()

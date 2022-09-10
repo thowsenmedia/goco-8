@@ -1,5 +1,7 @@
 class_name Tileset extends Reference
 
+signal changed()
+
 var path:String
 var filename:String
 var title:String
@@ -34,6 +36,7 @@ func get_region(index:int):
 func update_texture():
 	saved = false
 	texture.set_data(image)
+	emit_signal("changed")
 
 
 func save_file():

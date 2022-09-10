@@ -5,6 +5,7 @@ signal clipboard_set(data)
 const TilesetTileScene = preload("res://Spriter/Tileset/TilesetTile.tscn")
 
 signal tile_selected(tile_id)
+signal tile_changed(tile_id)
 
 var tileset:Tileset
 var tile_display_size:int = 24
@@ -44,9 +45,13 @@ func create_tiles():
 			tile.region = Rect2(x * tileset.tile_size, y * tileset.tile_size, tileset.tile_size, tileset.tile_size)
 			tile.render_size = tile_display_size
 			tile.connect("button_up", self, "_on_tile_pressed", [id])
+			tile.connect("changed", self, "_on_tile_changed", [id])
 			add_child(tile)
 			id += 1
 
+func _on_tile_changed(id):
+	var tile = get_child(id)
+	emit_signal("tile_changed", tile)
 
 func _on_tile_pressed(id: int, emit_event:bool = true):
 	if selected_tile != -1:

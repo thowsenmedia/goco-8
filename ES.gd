@@ -2,7 +2,7 @@ extends Node
 
 signal clipboard_set(item)
 
-const VERSION := "0.9.0"
+const VERSION := "0.10.0"
 
 enum COLORS {
 	
@@ -16,7 +16,7 @@ var editor
 var escript = EScript.new()
 var packer:Packer = Packer.new()
 
-var clipboard:ClipboardItem
+var clipboard:ClipboardItem = null
 
 func _ready():
 	var root = get_tree().root
@@ -25,6 +25,9 @@ func _ready():
 func clipboard_set(clipboard_item:ClipboardItem):
 	clipboard = clipboard_item
 	emit_signal("clipboard_set", clipboard)
+
+func has_clipboard() -> bool:
+	return clipboard != null
 
 func clipboard_get() -> ClipboardItem:
 	return clipboard

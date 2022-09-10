@@ -1,7 +1,7 @@
 extends RichTextLabel
 
 func _ready():
-	pass
+	install_effect(RainbowTextEffect.new())
 
 func write(string: String):
 	append_bbcode(string)
@@ -9,6 +9,3 @@ func write(string: String):
 func clear():
 	text = ""
 
-func _gui_input(event):
-	if event is InputEventKey:
-		return

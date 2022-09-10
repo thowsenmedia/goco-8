@@ -33,7 +33,7 @@ func clear():
 	image = null
 	image_texture = null
 	zoom = 1
-	zoom_max = 40
+	zoom_max = 100
 	camera = Vector2.ZERO
 
 
@@ -67,6 +67,7 @@ func set_image_region(region:Rect2):
 
 func update_image_texture():
 	image_texture.set_data(image)
+	emit_signal("image_changed")
 
 
 func set_zoom(z:int):
@@ -140,7 +141,6 @@ func set_pixel(pixel:Vector2, color: Color):
 		pixel += image_region.position
 	
 	image.set_pixelv(pixel, color)
-	emit_signal("image_changed")
 
 
 func get_pixel(pixel: Vector2) -> Color:
@@ -158,6 +158,7 @@ func apply_tool(event:InputEventMouse):
 				set_pixel(pixel, selected_color)
 				update_image_texture()
 				update()
+			get_tree().set_input_as_handled()
 		elif event.is_action("left_click"):
 			if event.pressed:
 				pencil_is_drawing = true
@@ -167,9 +168,56 @@ func apply_tool(event:InputEventMouse):
 					update()
 			else:
 				pencil_is_drawing = false
+			get_tree().set_input_as_handled()
 		elif event.is_action("right_click"):
 			selected_color = image.get_pixelv(pixel)
 			emit_signal("pencil_color_picked", selected_color)
+			get_tree().set_input_as_handled()
+	elif selected_tool == "fill":
+		if event is InputEventMouseButton and event.pressed:
+			fill()
+			update_image_texture()
+			update()
+			get_tree().set_input_as_handled()
+
+
+func fill():
+	print("filling")
+	var start = mouse_pixel_position
+	
+	if image_region:
+		start += image_region.position
+	
+	var start_color = image.get_pixel(start.x, start.y)
+	
+	var queue = []
+	queue.append(start)
+	while not queue.empty():
+		var n = queue.pop_front()
+		if image.get_pixel(n.x, n.y).is_equal_approx(start_color):
+			image.set_pixel(n.x, n.y, selected_color)
+			
+			for pixel in pixel_get_neighbours(n):
+				queue.append(pixel)
+	emit_signal("image_changed")
+
+
+func pixel_get_neighbours(pixel:Vector2) -> Array:
+	var img_size = image.get_size()
+	
+	var neighbours = []
+	
+	if pixel.x > image_region.position.x:
+		neighbours.append(pixel + Vector2.LEFT)
+	if pixel.x < image_region.end.x - 1:
+		neighbours.append(pixel + Vector2.RIGHT)
+	if pixel.y > image_region.position.y:
+		neighbours.append(pixel + Vector2.UP)
+	if pixel.y < image_region.end.y - 1:
+		neighbours.append(pixel + Vector2.DOWN)
+	
+	return neighbours
+	
 
 
 func mouse_to_pixel(mouse:Vector2) -> Vector2:
@@ -215,7 +263,6 @@ func _draw():
 		else:
 			draw_texture_rect(image_texture, Rect2(pos, img_size * zoom), false)
 			
-		
 
 
 func _on_paint_tool_pressed():

@@ -1,5 +1,7 @@
 tool class_name TilesetControl extends GridContainer
 
+signal clipboard_set(data)
+
 const TilesetTileScene = preload("res://Spriter/Tileset/TilesetTile.tscn")
 
 signal tile_selected(tile_id)

@@ -1,5 +1,7 @@
 extends Node
 
+signal clipboard_set(item)
+
 const VERSION := "0.9.0"
 
 enum COLORS {
@@ -14,9 +16,18 @@ var editor
 var escript = EScript.new()
 var packer:Packer = Packer.new()
 
+var clipboard:ClipboardItem
+
 func _ready():
 	var root = get_tree().root
 	current_scene = root.get_child(root.get_child_count() - 1)
+
+func clipboard_set(clipboard_item:ClipboardItem):
+	clipboard = clipboard_item
+	emit_signal("clipboard_set", clipboard)
+
+func clipboard_get() -> ClipboardItem:
+	return clipboard
 
 func project_folder_exists(project:String):
 	var dir = Directory.new()

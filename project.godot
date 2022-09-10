@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Console/Commands/ClearScreenCommand.gd"
 }, {
+"base": "Reference",
+"class": "ClipboardItem",
+"language": "GDScript",
+"path": "res://ClipboardItem.gd"
+}, {
 "base": "ConsoleCommand",
 "class": "CloseProjectCommand",
 "language": "GDScript",
@@ -357,6 +362,7 @@ _global_script_class_icons={
 "CatConsoleCommand": "",
 "ChangeDirCommand": "",
 "ClearScreenCommand": "",
+"ClipboardItem": "",
 "CloseProjectCommand": "",
 "CodeEditor": "",
 "Coder": "",
@@ -438,7 +444,6 @@ ES="*res://ES.gd"
 [debug]
 
 gdscript/warnings/unused_variable=false
-gdscript/warnings/shadowed_variable=false
 
 [display]
 
@@ -452,7 +457,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/color-palette/plugin.cfg", "res://addons/godot_sfxr/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/godot_sfxr/plugin.cfg" )
 
 [gui]
 

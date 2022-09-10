@@ -2,6 +2,7 @@ tool extends Control
 
 signal button_down()
 signal button_up()
+signal clipboard_set(data)
 
 var tileset:Tileset
 export(Rect2) var region:Rect2 setget set_region, get_region
@@ -34,8 +35,32 @@ func _gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			emit_signal("button_down")
+			get_tree().set_input_as_handled()
 		elif event.button_index == BUTTON_LEFT and not event.pressed:
 			emit_signal("button_up")
+			get_tree().set_input_as_handled()
+	elif event.is_action("copy") and event.pressed:
+		_copy_region_to_clipboard()
+		get_tree().set_input_as_handled()
+	elif event.is_action("paste") and event.pressed:
+		_paste_from_clipboard()
+		get_tree().set_input_as_handled()
+
+
+func _copy_region_to_clipboard():
+	print("copying")
+	var sub_image = tileset.image.get_rect(region)
+	var clipboard = ClipboardItem.new(ClipboardItem.TYPE_IMAGE, sub_image)
+	ES.clipboard_set(clipboard)
+
+func _paste_from_clipboard():
+	print("pasting")
+	if ES.clipboard and ES.clipboard.type == ClipboardItem.TYPE_IMAGE:
+		var img = ES.clipboard.get_data()
+		tileset.image.blit_rect(img, Rect2(0, 0, img.get_size().x, img.get_size().y), region.position)
+		tileset.update_texture()
+		update()
+		print("pasted!")
 
 func _draw():
 	var border_color = Color.black

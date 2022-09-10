@@ -59,9 +59,8 @@ text = "Tileset"
 
 [node name="LineEdit" type="LineEdit" parent="."]
 visible = false
-margin_left = -4.0
-margin_top = -1.0
-margin_right = 48.0
+margin_left = -10.0
+margin_right = 54.0
 margin_bottom = 17.0
 custom_styles/normal = SubResource( 4 )
 text = "Tileset"

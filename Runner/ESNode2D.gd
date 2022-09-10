@@ -38,6 +38,9 @@ func script(script_name) -> ESNode2D:
 func echo(message:String):
 	_runner.echo(message)
 
+func mouse() -> Vector2:
+	return get_global_mouse_position()
+
 func btn(action:String, player_id:int = 0) -> _ButtonState:
 	action = action.to_lower()
 	var joy_button = _BUTTON_MAPPING.find(action.to_lower())

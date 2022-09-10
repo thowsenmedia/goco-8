@@ -11,6 +11,8 @@ onready var addTilesetButton = $VBoxContainer/Tilesets/Panel/TilesetSelector/Add
 
 var project:Project
 
+var clipboard = null
+
 func _ready():
 	addTilesetButton.connect("pressed", newTilesetPopup, "popup_centered")
 	newTilesetPopup.connect("request_add", self, "add_tileset")
@@ -24,6 +26,15 @@ func _ready():
 		project.load_data()
 		_open_project(project)
 
+
+func set_clipboard(data):
+	clipboard = data
+
+func get_clipboard():
+	return clipboard
+
+func clipboard_empty() -> bool:
+	return clipboard == null
 
 func _close_project():
 	tilesetControl.clear()
